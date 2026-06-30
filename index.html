@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{
   --ink:#1f1d1a; --ink-soft:#56514a; --ink-faint:#8b857c;
@@ -136,65 +137,35 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .prio-pick button{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-weight:600;color:var(--ink-soft)}
 .prio-pick button.on{color:#fff;border-color:transparent}
 
-/* ===== All tasks ===== */
-.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;margin-bottom:18px}
-.filter-bar select,.filter-bar input{padding:8px 11px;background:var(--paper);border:1px solid var(--line);border-radius:10px;outline:none;font-size:13px;font-weight:500}
-.filter-bar select:focus,.filter-bar input:focus{border-color:var(--accent)}
-.filter-bar .f-search{flex:1;min-width:160px}
-.date-group{font-size:13px;font-weight:700;color:var(--ink-soft);margin:18px 2px 10px;display:flex;align-items:center;gap:8px}
-.date-group:first-child{margin-top:4px}
-.date-group .cnt{background:var(--paper);border:1px solid var(--line);color:var(--ink-faint);font-size:11.5px;padding:1px 8px;border-radius:20px;font-weight:700}
-.date-group.over{color:var(--red)}
-.todo.overdue::before{background:var(--red)}
-.todo .due{font-size:11px;color:var(--ink-faint);font-weight:600}
-.todo .due.over{color:var(--red)}
-.carry-btn{font-size:11.5px;padding:3px 9px;border-radius:8px;border:1px solid var(--red);color:var(--red);font-weight:700;background:transparent}
-.carry-btn:hover{background:var(--red);color:#fff}
-.overdue-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 16px;border:1px solid var(--red);background:rgba(184,71,59,.07);border-radius:var(--radius-sm);margin-bottom:16px;font-size:14px;font-weight:600;color:var(--red)}
-[data-theme="dark"] .overdue-banner{background:rgba(184,71,59,.14)}
-
 /* ===== Calendar ===== */
 .cal-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
 .cal-head h2{font-family:var(--display);font-size:24px;font-weight:600;min-width:150px}
 .cal-nav{display:flex;gap:6px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
 .cal-dow{text-align:center;font-size:12px;font-weight:700;color:var(--ink-faint);padding-bottom:4px}
-.cal-cell{min-height:96px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;
-  cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:4px}
-.cal-cell:hover{border-color:var(--accent)}
-.cal-cell.out{opacity:.4}
-.cal-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-.cal-cell .dnum{font-size:13px;font-weight:600;align-self:flex-start}
-.cal-cell.today .dnum{background:var(--accent);color:#fff;width:23px;height:23px;border-radius:50%;display:grid;place-items:center}
-.cal-cell .sun{color:var(--red)}.cal-cell .sat{color:var(--blue)}
-.ev{font-size:11px;padding:2px 6px;border-radius:6px;background:var(--accent-soft);color:var(--accent);
-  font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ev.task{background:var(--green-soft);color:var(--green)}
-.ev.gcal{background:rgba(58,110,165,.14);color:var(--blue)}
-.cal-more{font-size:10.5px;color:var(--ink-faint);font-weight:600}
-
-/* ===== This week ===== */
-.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.week-day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 9px 11px;min-height:96px;
-  display:flex;flex-direction:column;gap:5px;cursor:pointer;transition:.15s}
-.week-day:hover{border-color:var(--accent)}
-.week-day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-.week-day .wd-head{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
-.week-day .wd-dow{font-size:12px;font-weight:700;color:var(--ink-faint)}
-.week-day .wd-num{font-size:16px;font-weight:600;font-family:var(--display)}
-.week-day.today .wd-num{color:var(--accent)}
-.week-day .wd-sun{color:var(--red)}.week-day .wd-sat{color:var(--blue)}
-.wk-item{font-size:11.5px;padding:3px 7px;border-radius:7px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wk-item.ev{background:var(--accent-soft);color:var(--accent)}
-.wk-item.gcal{background:rgba(58,110,165,.14);color:var(--blue)}
-.wk-item.task{background:var(--green-soft);color:var(--green)}
-.wk-empty{font-size:11px;color:var(--ink-faint);opacity:.6}
-@media(max-width:860px){
-  .week-grid{grid-template-columns:1fr;gap:6px}
-  .week-day{flex-direction:row;flex-wrap:wrap;align-items:center;min-height:0;padding:9px 12px}
-  .week-day .wd-head{min-width:60px;margin-bottom:0}
-  .wk-item{flex:0 0 auto}
-}
+/* week-based calendar with multi-day bars */
+.cal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin-top:7px;
+  grid-template-rows:27px repeat(4,18px) auto}
+.cal-bg{grid-row:1/-1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  cursor:pointer;transition:.15s;min-height:104px}
+.cal-bg:hover{border-color:var(--accent)}
+.cal-bg.out{opacity:.4}
+.cal-bg.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.cal-dnum{grid-row:1;font-size:13px;font-weight:600;justify-self:start;align-self:start;
+  margin:7px 0 1px 8px;z-index:2;pointer-events:none}
+.cal-dnum.sun{color:var(--red)}.cal-dnum.sat{color:var(--blue)}.cal-dnum.out{opacity:.4}
+.cal-dnum.todaynum{background:var(--accent);color:#fff;width:23px;height:23px;border-radius:50%;
+  display:grid;place-items:center;margin:5px 0 1px 5px}
+.cal-bar{font-size:11px;font-weight:600;height:17px;line-height:17px;padding:0 6px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;z-index:2;pointer-events:none;align-self:center;margin:0 1px}
+.cal-bar.task{background:var(--green-soft);color:var(--green)}
+.cal-bar.gcal{background:rgba(58,110,165,.14);color:var(--blue)}
+.cal-bar.contL{border-top-left-radius:0;border-bottom-left-radius:0}
+.cal-bar.contR{border-top-right-radius:0;border-bottom-right-radius:0}
+.cal-more{font-size:10.5px;color:var(--ink-faint);font-weight:600;z-index:2;pointer-events:none;
+  padding-left:8px;align-self:center}
+.cal-dot{display:none}
 
 /* ===== Stats ===== */
 .chart-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-top:6px}
@@ -253,9 +224,12 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
     color:var(--ink-faint);padding:5px 12px;border-radius:10px;flex:1}
   .mob-nav button svg{width:21px;height:21px}
   .mob-nav button.active{color:var(--accent)}
-  .cal-cell{min-height:62px;padding:5px}
-  .cal-cell .ev{display:none}
-  .cal-cell .has{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .cal-week{grid-template-rows:58px}
+  .cal-bg{min-height:58px}
+  .cal-bar,.cal-more{display:none}
+  .cal-dnum{margin:5px 0 0 5px}
+  .cal-dot{display:block;grid-row:1;align-self:end;justify-self:center;
+    width:6px;height:6px;border-radius:50%;background:var(--accent);margin-bottom:6px;z-index:2;pointer-events:none}
 }
 .desktop-only{}
 @media(max-width:860px){.desktop-only{display:none}}
@@ -273,8 +247,6 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
     </div>
     <button class="nav-btn active" data-page="today" onclick="go('today')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> 오늘 할일</button>
-    <button class="nav-btn" data-page="all" onclick="go('all')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg> 전체 할일</button>
     <button class="nav-btn" data-page="calendar" onclick="go('calendar')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 월간 캘린더</button>
     <button class="nav-btn" data-page="stats" onclick="go('stats')">
@@ -324,45 +296,6 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
       </div>
     </section>
 
-    <!-- ===== ALL TASKS ===== -->
-    <section class="page" id="page-all">
-      <div class="page-head">
-        <div><div class="title">전체 할일</div><div class="sub" id="allSub">등록된 모든 할일을 한눈에</div></div>
-        <button class="btn accent desktop-only" onclick="openTaskModal()">+ 할일 추가</button>
-      </div>
-      <div class="stat-grid">
-        <div class="stat card"><div class="k">전체</div><div class="v" id="aTotal">0</div></div>
-        <div class="stat card"><div class="k">미완료</div><div class="v" id="aOpen">0</div></div>
-        <div class="stat card"><div class="k">지난 미완료</div><div class="v" id="aOverdue" style="color:var(--red)">0</div></div>
-        <div class="stat card"><div class="k">완료</div><div class="v" id="aDone">0</div></div>
-      </div>
-      <div class="filter-bar card">
-        <input id="allSearch" class="f-search" placeholder="제목·태그 검색" oninput="renderAll()">
-        <select id="allStatus" onchange="renderAll()">
-          <option value="all">상태: 전체</option>
-          <option value="open">미완료만</option>
-          <option value="done">완료만</option>
-          <option value="overdue">지난 미완료</option>
-        </select>
-        <select id="allCat" onchange="renderAll()"></select>
-        <select id="allPrio" onchange="renderAll()">
-          <option value="all">우선순위: 전체</option>
-          <option value="q1">긴급·중요</option>
-          <option value="q2">중요·여유</option>
-          <option value="q3">긴급·사소</option>
-          <option value="q4">나중에</option>
-        </select>
-        <select id="allSort" onchange="renderAll()">
-          <option value="dateDesc">최신 날짜순</option>
-          <option value="dateAsc">오래된 날짜순</option>
-          <option value="prio">우선순위순</option>
-        </select>
-        <button class="btn ghost sm" onclick="resetAllFilters()">초기화</button>
-      </div>
-      <div id="overdueBanner"></div>
-      <div id="allList"></div>
-    </section>
-
     <!-- ===== CALENDAR ===== -->
     <section class="page" id="page-calendar">
       <div class="page-head">
@@ -381,9 +314,7 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
         <button class="btn ghost sm" onclick="goToday()">오늘</button>
       </div>
       <div class="cal-grid" id="calDow"></div>
-      <div class="cal-grid" id="calBody" style="margin-top:7px"></div>
-      <div class="section-title" style="margin-top:26px">이번 주 일정 · 할일 <span class="count" id="weekRange"></span></div>
-      <div class="week-grid" id="weekBody"></div>
+      <div id="calBody"></div>
     </section>
 
     <!-- ===== STATS ===== -->
@@ -458,15 +389,11 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 
         <div class="admin-card card">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 구글 캘린더 가져오기 <span id="gStatus" style="font-size:12px;font-weight:600;margin-left:auto;color:var(--ink-faint)">○ 연결 안됨</span></h3>
-          <div class="desc">구글 캘린더의 <b>iCal(.ics) 주소</b>를 붙여넣으면 일정을 앱 달력에 표시합니다 (읽기 전용). OAuth 설정이 필요 없습니다.<br>
-            구글 캘린더 → 설정 → 캘린더 선택 → "캘린더 통합" → <b>iCal 형식의 비공개(또는 공개) 주소</b>(.ics로 끝남)를 복사해 붙여넣으세요.</div>
-          <div class="field"><label>iCal URL (.ics)</label><input id="setGIcs" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics"></div>
-          <button class="btn accent sm" style="width:100%;justify-content:center;margin-bottom:9px" onclick="importGoogle()">지금 가져오기</button>
-          <button class="btn ghost sm" style="width:100%;justify-content:center;margin-bottom:9px" onclick="document.getElementById('icsFileInput').click()">ICS 파일 직접 가져오기</button>
-          <input type="file" id="icsFileInput" accept=".ics,.ical,text/calendar" style="display:none" onchange="importIcsFile(event)">
-          <button class="btn ghost sm" style="width:100%;justify-content:center;margin-bottom:9px" onclick="useHolidayIcs()">한국 공휴일 캘린더로 빠른 설정</button>
+          <div class="desc">구글 캘린더의 일정을 앱 달력에 표시합니다 (읽기 전용). 최초 1회 구글 클라이언트 ID 설정이 필요합니다 (안내문 참고).</div>
+          <div class="field"><label>구글 OAuth 클라이언트 ID</label><input id="setGClient" placeholder="xxxx.apps.googleusercontent.com"></div>
+          <button class="btn accent sm" id="gConnectBtn" style="width:100%;justify-content:center;margin-bottom:9px" onclick="googleConnect()">구글 계정 연결</button>
+          <button class="btn sm" style="width:100%;justify-content:center;margin-bottom:9px" onclick="importGoogle()">지금 가져오기</button>
           <div class="tiny" id="gSyncStatus" style="color:var(--ink-faint)">아직 가져오지 않음</div>
-          <div class="tiny" style="margin-top:8px;color:var(--ink-faint)">⚠️ 브라우저 보안(CORS)으로 직접 다운로드가 막히면 자동으로 공개 프록시로 재시도하며, 그래도 안 되면 "ICS 파일 직접 가져오기"를 이용하세요.</div>
         </div>
 
         <div class="admin-card card">
@@ -485,7 +412,6 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 <!-- mobile nav -->
 <nav class="mob-nav">
   <button class="active" data-page="today" onclick="go('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>오늘</button>
-  <button data-page="all" onclick="go('all')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>전체</button>
   <button data-page="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>캘린더</button>
   <button data-page="stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/></svg>통계</button>
   <button data-page="admin" onclick="go('admin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82M4.6 9a1.65 1.65 0 00-.33-1.82"/></svg>관리자</button>
@@ -524,11 +450,10 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
   <div class="modal">
     <h3 id="eventModalTitle">일정 추가</h3>
     <input type="hidden" id="eventId">
-    <input type="hidden" id="eventGid">
     <div class="field"><label>일정 제목</label><input id="eventTitle" placeholder="예: 팀 미팅"></div>
     <div class="row">
       <div class="field"><label>시작 날짜</label><input type="date" id="eventDate"></div>
-      <div class="field"><label>종료 날짜 <span style="color:var(--ink-faint);font-weight:400">(여러 날일 때)</span></label><input type="date" id="eventEndDate"></div>
+      <div class="field"><label>종료 날짜 <span style="color:var(--ink-faint);font-weight:400">(여러날)</span></label><input type="date" id="eventEndDate"></div>
     </div>
     <div class="row">
       <div class="field"><label>시작 시간</label><input type="time" id="eventStart"></div>
@@ -607,7 +532,7 @@ function defaults(){return{
   tasks:[],events:[],templates:[],
   categories:[{name:"업무",color:"#c4622d"},{name:"회의",color:"#3a6ea5"},{name:"개인",color:"#3f7d56"},{name:"학습",color:"#7a5a8e"}],
   settings:{theme:"light",accent:"#c4622d",start:"09:00",end:"18:00",workdays:[1,2,3,4,5],tz:"Asia/Seoul",lastGen:"",
-    googleIcsUrl:"",lastSync:"",reminderOn:false,reminderTime:"08:00",gcalDeleted:[]},
+    googleClientId:"",lastSync:"",reminderOn:false,reminderTime:"08:00"},
   gcal:[]
 }}
 function load(){try{D=JSON.parse(localStorage.getItem(KEY))||defaults()}catch(e){D=defaults()}
@@ -619,14 +544,11 @@ function go(p){
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.getElementById("page-"+p).classList.add("active");
   document.querySelectorAll(".nav-btn,.mob-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
-  if(p==="all"){fillAllCatFilter();renderAll();}
   if(p==="calendar")renderCal();
   if(p==="stats")renderStats();
   if(p==="admin")renderAdmin();
   window.scrollTo(0,0);
 }
-function pageActive(p){return document.getElementById("page-"+p).classList.contains("active")}
-function syncAll(){if(pageActive("all"))renderAll();if(pageActive("calendar"))renderCal()}
 function fabAdd(){const active=document.querySelector(".nav-btn.active,.mob-nav button.active").dataset.page;
   if(active==="calendar")openEventModal();else openTaskModal();}
 
@@ -635,7 +557,7 @@ function catColor(name){const c=D.categories.find(c=>c.name===name);return c?c.c
 function quickAddTask(){
   const inp=document.getElementById("quickAdd");const v=inp.value.trim();if(!v)return;
   D.tasks.push({id:uid(),title:v,date:todayStr(),done:false,priority:"q2",category:D.categories[0]?.name||"",tags:[],focus:0,createdAt:Date.now(),completedAt:null});
-  inp.value="";save();renderToday();syncAll();toast("할일이 추가되었습니다");
+  inp.value="";save();renderToday();toast("할일이 추가되었습니다");
 }
 function openTaskModal(t){
   document.getElementById("taskModalTitle").textContent=t?"할일 수정":"할일 추가";
@@ -660,29 +582,22 @@ function saveTask(){
     tags:document.getElementById("taskTags").value.split(",").map(s=>s.trim()).filter(Boolean)};
   if(id){Object.assign(D.tasks.find(t=>t.id===id),obj)}
   else{D.tasks.push(Object.assign({id:uid(),done:false,createdAt:Date.now(),completedAt:null},obj))}
-  save();closeModal("taskOverlay");renderToday();syncAll();if(document.getElementById("page-calendar").classList.contains("active"))renderCal();
+  save();closeModal("taskOverlay");renderToday();if(document.getElementById("page-calendar").classList.contains("active"))renderCal();
   toast("저장되었습니다");
 }
-function toggleTask(id){const t=D.tasks.find(t=>t.id===id);t.done=!t.done;t.completedAt=t.done?Date.now():null;save();renderToday();syncAll()}
-function delTask(id){D.tasks=D.tasks.filter(t=>t.id!==id);save();renderToday();syncAll()}
+function toggleTask(id){const t=D.tasks.find(t=>t.id===id);t.done=!t.done;t.completedAt=t.done?Date.now():null;save();renderToday()}
+function delTask(id){D.tasks=D.tasks.filter(t=>t.id!==id);save();renderToday()}
 
-function taskHTML(t,opts){
-  opts=opts||{};
+function taskHTML(t){
   const cc=catColor(t.category);
   const tags=(t.tags||[]).map(x=>`<span class="tag">#${esc(x)}</span>`).join("");
-  const over=!t.done&&t.date<todayStr();
-  const showOver=over&&opts.allView;
-  const dateChip=opts.showDate?`<span class="due ${over?'over':''}">${fmtShort(t.date)}</span>`:"";
-  const carry=showOver?`<button class="carry-btn" onclick="carryToToday('${t.id}')">오늘로</button>`:"";
-  return `<div class="todo ${t.done?'done':''} ${showOver?'overdue':''}" style="--pc:${PRIO[t.priority].c}">
+  return `<div class="todo ${t.done?'done':''}" style="--pc:${PRIO[t.priority].c}">
     <button class="check" onclick="toggleTask('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 6"/></svg></button>
     <div class="t-body"><div class="t-title">${esc(t.title)}</div>
       <div class="t-meta">
-        ${dateChip}
         ${t.category?`<span class="tag cat" style="background:${cc}">${esc(t.category)}</span>`:""}
         <span class="tag" style="color:${PRIO[t.priority].c}">${PRIO[t.priority].n}</span>
         ${tags}
-        ${carry}
       </div></div>
     <div class="t-actions">
       <button class="icon-btn" onclick='openTaskModal(${JSON.stringify(t).replace(/'/g,"&#39;")})'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-9 9-4 1 1-4 8-10z"/></svg></button>
@@ -712,81 +627,6 @@ function weekDoneCount(){const now=new Date();const day=(now.getDay()+6)%7;const
   return D.tasks.filter(t=>t.done&&t.completedAt&&t.completedAt>=mon.getTime()).length}
 function emptyHTML(msg){return `<div class="empty card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><div>${msg}</div></div>`}
 
-/* ============ All tasks (전체 할일 내역) ============ */
-function fmtShort(ds){const d=new Date(ds+"T00:00");return(d.getMonth()+1)+"/"+d.getDate()+" ("+DOW[d.getDay()]+")"}
-function fmtGroupDate(ds){
-  const d=new Date(ds+"T00:00");
-  const diff=Math.round((d-new Date(todayStr()+"T00:00"))/86400000);
-  let rel="";if(diff===0)rel=" · 오늘";else if(diff===-1)rel=" · 어제";else if(diff===1)rel=" · 내일";
-  return fmtKDate(d)+rel;
-}
-function fillAllCatFilter(){
-  const s=document.getElementById("allCat");if(!s)return;
-  const cur=s.value;
-  s.innerHTML=`<option value="all">카테고리: 전체</option>`+D.categories.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join("");
-  if(cur)s.value=cur;
-}
-function resetAllFilters(){
-  document.getElementById("allSearch").value="";
-  document.getElementById("allStatus").value="all";
-  document.getElementById("allCat").value="all";
-  document.getElementById("allPrio").value="all";
-  document.getElementById("allSort").value="dateDesc";
-  renderAll();
-}
-function carryToToday(id){const t=D.tasks.find(t=>t.id===id);if(!t)return;t.date=todayStr();save();renderToday();renderAll();toast("오늘로 가져왔습니다")}
-function carryAllOverdue(){
-  const today=todayStr();let n=0;
-  D.tasks.forEach(t=>{if(!t.done&&t.date<today){t.date=today;n++}});
-  if(n){save();renderToday();renderAll();toast(n+"개를 오늘로 가져왔습니다")}else toast("가져올 일이 없습니다");
-}
-function renderAll(){
-  generateRepeats();
-  const today=todayStr();
-  const q=(document.getElementById("allSearch").value||"").trim().toLowerCase();
-  const st=document.getElementById("allStatus").value;
-  const cat=document.getElementById("allCat").value;
-  const prio=document.getElementById("allPrio").value;
-  const sort=document.getElementById("allSort").value;
-  // 상단 통계(필터 무관, 전체 기준)
-  const overdueAll=D.tasks.filter(t=>!t.done&&t.date<today);
-  document.getElementById("aTotal").textContent=D.tasks.length;
-  document.getElementById("aOpen").textContent=D.tasks.filter(t=>!t.done).length;
-  document.getElementById("aOverdue").textContent=overdueAll.length;
-  document.getElementById("aDone").textContent=D.tasks.filter(t=>t.done).length;
-  // 지난 미완료 배너
-  const banner=document.getElementById("overdueBanner");
-  banner.innerHTML=overdueAll.length?`<div class="overdue-banner"><span>⚠️ 기한이 지난 미완료 할일 ${overdueAll.length}개</span><button class="btn sm" style="margin-left:auto;background:var(--red);color:#fff" onclick="carryAllOverdue()">모두 오늘로 가져오기</button></div>`:"";
-  // 필터링
-  let list=D.tasks.slice();
-  if(q)list=list.filter(t=>t.title.toLowerCase().includes(q)||(t.tags||[]).some(x=>(x+"").toLowerCase().includes(q)));
-  if(st==="open")list=list.filter(t=>!t.done);
-  else if(st==="done")list=list.filter(t=>t.done);
-  else if(st==="overdue")list=list.filter(t=>!t.done&&t.date<today);
-  if(cat&&cat!=="all")list=list.filter(t=>t.category===cat);
-  if(prio&&prio!=="all")list=list.filter(t=>t.priority===prio);
-  document.getElementById("allSub").textContent=list.length+"개 표시 / 전체 "+D.tasks.length+"개";
-  const cont=document.getElementById("allList");
-  if(!list.length){cont.innerHTML=emptyHTML("조건에 맞는 할일이 없습니다.");return;}
-  if(sort==="prio"){
-    list.sort((a,b)=>prioOrder[a.priority]-prioOrder[b.priority]||b.date.localeCompare(a.date));
-    cont.innerHTML=list.map(t=>taskHTML(t,{allView:true,showDate:true})).join("");
-    return;
-  }
-  // 날짜별 그룹화
-  const groups={};list.forEach(t=>{(groups[t.date]=groups[t.date]||[]).push(t)});
-  let dates=Object.keys(groups).sort();
-  if(sort==="dateDesc")dates.reverse();
-  let html="";
-  dates.forEach(ds=>{
-    const items=groups[ds].sort((a,b)=>prioOrder[a.priority]-prioOrder[b.priority]);
-    const over=ds<today&&items.some(t=>!t.done);
-    html+=`<div class="date-group ${over?'over':''}">${fmtGroupDate(ds)}<span class="cnt">${items.length}</span></div>`;
-    html+=items.map(t=>taskHTML(t,{allView:true,showDate:false})).join("");
-  });
-  cont.innerHTML=html;
-}
-
 /* ============ Repeats ============ */
 function generateRepeats(){
   const t=todayStr();if(D.settings.lastGen===t)return;
@@ -804,60 +644,68 @@ function generateRepeats(){
 }
 
 /* ============ Calendar ============ */
-/* 일정이 시작일~종료일(endDate)에 걸쳐 있으면 그 사이 모든 날짜에 표시.
-   날짜 문자열(YYYY-MM-DD)은 사전식 비교로 범위 판정이 가능. */
-function inEv(e,ds){const s=e.date;const en=e.endDate||e.date;return s<=ds&&ds<=en;}
-function isMultiDay(e){return e.endDate&&e.endDate!==e.date;}
-function rangeLabel(e){return isMultiDay(e)?(fmtRange(e.date)+" ~ "+fmtRange(e.endDate)):""}
-function fmtRange(ds){const d=new Date(ds+"T00:00");return(d.getMonth()+1)+"/"+d.getDate()}
+const CAL_MAX_LANES=4;            // visible bar rows per week before "+N개"
+function evEnd(e){return e.endDate&&e.endDate>e.date?e.endDate:e.date}
 function renderCal(){
   document.getElementById("calDow").innerHTML=DOW.map((d,i)=>`<div class="cal-dow" style="color:${i===0?'var(--red)':i===6?'var(--blue)':''}">${d}</div>`).join("");
   const y=calCur.getFullYear(),m=calCur.getMonth();
   document.getElementById("calTitle").textContent=y+"년 "+(m+1)+"월";
   const first=new Date(y,m,1),start=new Date(first);start.setDate(1-first.getDay());
+  const gridStart=new Date(start);gridStart.setHours(0,0,0,0);
+  const tStr=todayStr();
+  // day index helper relative to top-left cell (0..41 inside grid, <0 or >41 outside)
+  const gi=ds=>Math.round((new Date(ds+"T00:00")-gridStart)/86400000);
+  // collect all segments {s,e (inclusive global idx), title, cls, time}
+  const segs=[];
+  D.events.forEach(e=>segs.push({startDs:e.date,endDs:evEnd(e),title:e.title,cls:"",time:e.time||""}));
+  (D.gcal||[]).forEach(e=>segs.push({startDs:e.date,endDs:evEnd(e),title:e.title,cls:"gcal",time:e.time||""}));
+  D.tasks.forEach(t=>segs.push({startDs:t.date,endDs:t.date,title:t.title,cls:"task",time:""}));
+  segs.forEach(sg=>{sg.s=gi(sg.startDs);sg.e=gi(sg.endDs);sg.span=sg.e-sg.s});
   let html="";
-  for(let i=0;i<42;i++){
-    const d=new Date(start);d.setDate(start.getDate()+i);
-    const ds=ymd(d);const out=d.getMonth()!==m;const isToday=ds===todayStr();const wd=d.getDay();
-    const evs=D.events.filter(e=>inEv(e,ds));
-    const gcs=(D.gcal||[]).filter(e=>inEv(e,ds));
-    const tks=D.tasks.filter(t=>t.date===ds);
-    const items=[...gcs.map(e=>({t:(e.time?e.time+" ":"")+e.title,cls:"gcal"})),...evs.map(e=>({t:(e.time?e.time+" ":"")+e.title,cls:""})),...tks.map(t=>({t:t.title,cls:"task"}))];
-    const shown=items.slice(0,3).map(it=>`<div class="ev ${it.cls}">${esc(it.t)}</div>`).join("");
-    const more=items.length>3?`<div class="cal-more">+${items.length-3}개</div>`:"";
-    const hasDot=items.length?'<div class="has"></div>':'';
-    html+=`<div class="cal-cell ${out?'out':''} ${isToday?'today':''}" onclick="openDay('${ds}')">
-      <div class="dnum ${wd===0?'sun':wd===6?'sat':''}">${d.getDate()}</div>${shown}${more}${hasDot}</div>`;
+  for(let w=0;w<6;w++){
+    const lo=w*7,hi=lo+7-1;
+    // segments overlapping this week, sorted: longer/multi-day first, then earlier start, then time
+    const wsegs=segs.filter(sg=>sg.e>=lo&&sg.s<=hi)
+      .sort((a,b)=>(b.span-a.span)||(a.s-b.s)||((a.time||"~").localeCompare(b.time||"~")));
+    // greedy lane assignment; lanes[lane] = array of [colStart,colEnd] occupied
+    const lanes=[];const overflow=[0,0,0,0,0,0,0]; // per-column hidden count
+    wsegs.forEach(sg=>{
+      const cs=Math.max(sg.s,lo)-lo,ce=Math.min(sg.e,hi)-lo;
+      let lane=0;
+      for(;;lane++){
+        if(!lanes[lane]){lanes[lane]=[];}
+        if(lanes[lane].every(r=>ce<r[0]||cs>r[1]))break;
+      }
+      lanes[lane].push([cs,ce]);
+      sg._cs=cs;sg._ce=ce;sg._lane=lane;
+      sg._contL=sg.s<lo;sg._contR=sg.e>hi;
+      if(lane>=CAL_MAX_LANES)for(let c=cs;c<=ce;c++)overflow[c]++;
+    });
+    // build week
+    let cells="";
+    for(let c=0;c<7;c++){
+      const d=new Date(start);d.setDate(start.getDate()+lo+c);
+      const ds=ymd(d);const out=d.getMonth()!==m;const isToday=ds===tStr;const wd=d.getDay();
+      const dayHasItem=wsegs.some(sg=>sg._cs<=c&&sg._ce>=c);
+      cells+=`<div class="cal-bg ${out?'out':''} ${isToday?'today':''}" style="grid-column:${c+1}" onclick="openDay('${ds}')"></div>`+
+        `<div class="cal-dnum ${out?'out':''} ${isToday?'todaynum':wd===0?'sun':wd===6?'sat':''}" style="grid-column:${c+1}">${d.getDate()}</div>`+
+        (dayHasItem?`<div class="cal-dot" style="grid-column:${c+1}"></div>`:"");
+    }
+    // bars
+    let bars="";
+    wsegs.forEach(sg=>{
+      if(sg._lane>=CAL_MAX_LANES)return;
+      const label=sg.span>0?sg.title:(sg.time?sg.time+" "+sg.title:sg.title);
+      bars+=`<div class="cal-bar ${sg.cls} ${sg._contL?'contL':''} ${sg._contR?'contR':''}" title="${esc(sg.title)}" `+
+        `style="grid-column:${sg._cs+1}/${sg._ce+2};grid-row:${sg._lane+2}">${esc(label)}</div>`;
+    });
+    // overflow indicators (+N개) on last visible row
+    let mores="";
+    for(let c=0;c<7;c++)if(overflow[c]>0)
+      mores+=`<div class="cal-more" style="grid-column:${c+1};grid-row:${CAL_MAX_LANES+2}">+${overflow[c]}개</div>`;
+    html+=`<div class="cal-week">${cells}${bars}${mores}</div>`;
   }
   document.getElementById("calBody").innerHTML=html;
-  renderWeek();
-}
-/* 이번 주(일요일 시작) 일정·할일 */
-function startOfWeekSun(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-x.getDay());return x}
-function renderWeek(){
-  const wb=document.getElementById("weekBody");if(!wb)return;
-  const today=todayStr();
-  const start=startOfWeekSun(new Date());
-  const end=new Date(start);end.setDate(start.getDate()+6);
-  const rg=document.getElementById("weekRange");
-  if(rg)rg.textContent=(start.getMonth()+1)+"/"+start.getDate()+" ~ "+(end.getMonth()+1)+"/"+end.getDate();
-  let html="";
-  for(let i=0;i<7;i++){
-    const d=new Date(start);d.setDate(start.getDate()+i);const ds=ymd(d);const wd=d.getDay();const isT=ds===today;
-    const gcs=(D.gcal||[]).filter(e=>inEv(e,ds)).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
-    const evs=D.events.filter(e=>inEv(e,ds)).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
-    const tks=D.tasks.filter(t=>t.date===ds&&!t.done).sort((a,b)=>prioOrder[a.priority]-prioOrder[b.priority]);
-    const cls=wd===0?'wd-sun':wd===6?'wd-sat':'';
-    let items="";
-    items+=gcs.map(e=>`<div class="wk-item gcal" title="${esc(e.title)}">${e.time?"<b>"+e.time+"</b> ":""}${esc(e.title)}</div>`).join("");
-    items+=evs.map(e=>`<div class="wk-item ev" title="${esc(e.title)}">${e.time?"<b>"+e.time+"</b> ":""}${esc(e.title)}</div>`).join("");
-    items+=tks.map(t=>`<div class="wk-item task" title="${esc(t.title)}">✓ ${esc(t.title)}</div>`).join("");
-    if(!items)items=`<div class="wk-empty">—</div>`;
-    html+=`<div class="week-day ${isT?'today':''}" onclick="openDay('${ds}')">
-      <div class="wd-head"><span class="wd-dow ${cls}">${DOW[wd]}</span><span class="wd-num ${cls}">${d.getDate()}</span></div>
-      ${items}</div>`;
-  }
-  wb.innerHTML=html;
 }
 function moveMonth(n){calCur.setMonth(calCur.getMonth()+n);renderCal()}
 function goToday(){calCur=new Date();renderCal()}
@@ -866,19 +714,20 @@ function openDay(ds){
   const d=new Date(ds+"T00:00");
   document.getElementById("dayTitle").textContent=fmtKDate(d);
   document.getElementById("dayOverlay").dataset.date=ds;
-  const evs=D.events.filter(e=>inEv(e,ds)).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
-  const gcs=(D.gcal||[]).filter(e=>inEv(e,ds)).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
+  const covers=e=>e.date<=ds&&evEnd(e)>=ds;
+  const evs=D.events.filter(covers).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
+  const gcs=(D.gcal||[]).filter(covers).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
   const tks=D.tasks.filter(t=>t.date===ds);
   let h="";
   h+=`<div class="section-title" style="margin-top:0">일정 <span class="count">${evs.length}</span></div>`;
+  const mdLabel=e=>{if(!(e.endDate&&e.endDate>e.date))return"";const f=s=>{const p=s.split("-");return +p[1]+"/"+ +p[2]};return `<span style="color:var(--accent);font-weight:600">📅 ${f(e.date)}~${f(e.endDate)}</span> `};
   h+=evs.length?evs.map(e=>`<div class="list-item"><div class="dot" style="background:${catColor(e.category)}"></div>
-    <div class="nm">${esc(e.title)}${isMultiDay(e)?` <span class="tag" style="color:var(--accent)">기간</span>`:""}<div class="tiny">${isMultiDay(e)?"📅 "+rangeLabel(e)+" · ":""}${e.time||""}${e.endTime?" ~ "+e.endTime:""} ${e.note?"· "+esc(e.note):""}</div></div>
+    <div class="nm">${esc(e.title)}<div class="tiny">${mdLabel(e)}${e.time||""}${e.endTime?" ~ "+e.endTime:""} ${e.note?"· "+esc(e.note):""}</div></div>
     <button class="icon-btn" onclick='openEventModal(${JSON.stringify(e).replace(/'/g,"&#39;")})'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-9 9-4 1 1-4 8-10z"/></svg></button></div>`).join(""):`<div class="tiny" style="color:var(--ink-faint);margin-bottom:8px">일정 없음</div>`;
   if(gcs.length){h+=`<div class="section-title">구글 캘린더 <span class="count">${gcs.length}</span></div>`;
     h+=gcs.map(e=>`<div class="list-item"><div class="dot" style="background:var(--blue)"></div>
-      <div class="nm">${esc(e.title)}${isMultiDay(e)?` <span class="tag" style="color:var(--accent)">기간</span>`:""}<div class="tiny">${isMultiDay(e)?"📅 "+rangeLabel(e)+" · ":""}${e.time||"종일"}${e.endTime?" ~ "+e.endTime:""}${e.note?" · "+esc(e.note):""}</div></div>
-      <span class="tag" style="color:${e.userModified?'var(--green)':'var(--blue)'}">${e.userModified?"수정됨":"구글"}</span>
-      <button class="icon-btn" onclick='openEventModal(${JSON.stringify(e).replace(/'/g,"&#39;")})'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-9 9-4 1 1-4 8-10z"/></svg></button></div>`).join("");}
+      <div class="nm">${esc(e.title)}<div class="tiny">${e.time||"종일"}${e.endTime?" ~ "+e.endTime:""}${e.note?" · "+esc(e.note):""}</div></div>
+      <span class="tag" style="color:var(--blue)">읽기전용</span></div>`).join("");}
   h+=`<div class="section-title">할일 <span class="count">${tks.length}</span></div>`;
   h+=tks.length?tks.map(t=>`<div class="list-item"><div class="dot" style="background:${PRIO[t.priority].c}"></div><div class="nm" style="${t.done?'text-decoration:line-through;opacity:.6':''}">${esc(t.title)}</div></div>`).join(""):`<div class="tiny" style="color:var(--ink-faint)">할일 없음</div>`;
   document.getElementById("dayContent").innerHTML=h;
@@ -888,50 +737,33 @@ function addEventForDay(){const ds=document.getElementById("dayOverlay").dataset
 
 /* ============ Events ============ */
 function openEventModal(e,presetDate){
-  const isG=!!(e&&e.googleId); // 구글(iCal)에서 가져온 일정인지
-  document.getElementById("eventModalTitle").textContent=e?(isG?"구글 일정 수정":"일정 수정"):"일정 추가";
-  document.getElementById("eventId").value=(e&&!isG)?e.id:"";
-  document.getElementById("eventGid").value=isG?e.googleId:"";
+  document.getElementById("eventModalTitle").textContent=e?"일정 수정":"일정 추가";
+  document.getElementById("eventId").value=e?e.id:"";
   document.getElementById("eventTitle").value=e?e.title:"";
   document.getElementById("eventDate").value=e?e.date:(presetDate||todayStr());
-  document.getElementById("eventEndDate").value=e?(e.endDate&&e.endDate!==e.date?e.endDate:""):"";
+  document.getElementById("eventEndDate").value=e?e.endDate||"":"";
   document.getElementById("eventStart").value=e?e.time||"":"";
   document.getElementById("eventEnd").value=e?e.endTime||"":"";
   document.getElementById("eventNote").value=e?e.note||"":"";
   fillCatSelect("eventCat",e?e.category:"");
   document.getElementById("evDelBtn").style.display=e?"flex":"none";
-  document.getElementById("evDelBtn").textContent=isG?"구글 일정 숨기기":"일정 삭제";
   showModal("eventOverlay");
 }
 function saveEvent(){
   const title=document.getElementById("eventTitle").value.trim();if(!title){toast("제목을 입력하세요");return}
   const id=document.getElementById("eventId").value;
-  const gid=document.getElementById("eventGid").value;
-  let sd=document.getElementById("eventDate").value;
-  let ed=document.getElementById("eventEndDate").value;
-  if(ed&&sd&&ed<sd){const t=sd;sd=ed;ed=t;} // 종료가 시작보다 빠르면 교환
-  const obj={title,date:sd,endDate:ed||sd,time:document.getElementById("eventStart").value,
+  let endDate=document.getElementById("eventEndDate").value;
+  const startDate=document.getElementById("eventDate").value;
+  if(endDate&&endDate<startDate){toast("종료 날짜가 시작 날짜보다 빠릅니다");return}
+  if(endDate&&endDate===startDate)endDate="";
+  const obj={title,date:startDate,endDate,time:document.getElementById("eventStart").value,
     endTime:document.getElementById("eventEnd").value,category:document.getElementById("eventCat").value,note:document.getElementById("eventNote").value.trim()};
-  if(gid){ // 구글 일정 수정 → D.gcal 항목 갱신 + userModified 표시(재동기화 시 보존)
-    const g=(D.gcal||[]).find(x=>x.googleId===gid);
-    if(g){Object.assign(g,obj,{userModified:true});}
-  }
-  else if(id)Object.assign(D.events.find(e=>e.id===id),obj);
+  if(id)Object.assign(D.events.find(e=>e.id===id),obj);
   else D.events.push(Object.assign({id:uid()},obj));
   save();closeModal("eventOverlay");renderCal();
   toast("일정이 저장되었습니다");
 }
-function deleteEvent(){
-  const id=document.getElementById("eventId").value;
-  const gid=document.getElementById("eventGid").value;
-  if(gid){ // 구글 일정 숨기기: 목록에서 제거하고 재동기화 시 다시 안 나오게 기록
-    D.gcal=(D.gcal||[]).filter(e=>e.googleId!==gid);
-    D.settings.gcalDeleted=D.settings.gcalDeleted||[];
-    if(!D.settings.gcalDeleted.includes(gid))D.settings.gcalDeleted.push(gid);
-    save();closeModal("eventOverlay");renderCal();toast("구글 일정을 숨겼습니다");return;
-  }
-  D.events=D.events.filter(e=>e.id!==id);save();closeModal("eventOverlay");renderCal();toast("삭제되었습니다");
-}
+function deleteEvent(){const id=document.getElementById("eventId").value;D.events=D.events.filter(e=>e.id!==id);save();closeModal("eventOverlay");renderCal();toast("삭제되었습니다")}
 function openGoogleCal(){window.open("https://calendar.google.com/calendar/r","_blank")}
 function addToGoogle(){
   const title=document.getElementById("eventTitle").value.trim();if(!title){toast("제목을 입력하세요");return}
@@ -1017,7 +849,7 @@ function renderAdmin(){
   // 알림 / 구글
   document.getElementById("setRemTime").value=D.settings.reminderTime||"08:00";
   document.getElementById("remToggle").classList.toggle("on",!!D.settings.reminderOn);
-  document.getElementById("setGIcs").value=D.settings.googleIcsUrl||"";
+  document.getElementById("setGClient").value=D.settings.googleClientId||"";
   updateGoogleUI();
 }
 function toggleTheme(){D.settings.theme=D.settings.theme==="dark"?"light":"dark";applyTheme();save();renderAdmin();
@@ -1079,109 +911,65 @@ function applyTheme(){document.documentElement.setAttribute("data-theme",D.setti
   // recompute accent-soft tint
 }
 
-/* ============ Google Calendar 가져오기 (iCal/.ics · 읽기 전용) ============ */
-/* 이전 파일과 동일한 방식: OAuth 없이 iCal(.ics) 주소를 가져와 파싱.
-   CORS로 직접 접근이 막히면 공개 프록시로 폴백, 그래도 안 되면 ICS 파일 업로드. */
-const ICS_PROXIES=["","https://api.allorigins.win/raw?url=","https://corsproxy.io/?"];
-function unfoldIcs(text){
-  // RFC5545 line folding 해제 (다음 줄이 공백/탭으로 시작하면 이어붙임)
-  return text.replace(/\r\n/g,"\n").replace(/\n[ \t]/g,"");
+/* ============ Google Calendar 가져오기 (읽기 전용) ============ */
+let tokenClient=null, gToken=null;
+function initGoogle(){
+  if(!window.google||!google.accounts||!D.settings.googleClientId)return false;
+  try{
+    tokenClient=google.accounts.oauth2.initTokenClient({
+      client_id:D.settings.googleClientId.trim(),
+      scope:"https://www.googleapis.com/auth/calendar.readonly",
+      callback:(resp)=>{if(resp&&resp.access_token){gToken=resp.access_token;updateGoogleUI();toast("구글 계정 연결됨");importGoogle();}}
+    });
+    return true;
+  }catch(e){return false}
 }
-function icsUnescape(s){return !s?"":s.replace(/\\n/gi,"\n").replace(/\\,/g,",").replace(/\\;/g,";").replace(/\\\\/g,"\\")}
-function parseIcs(text){
-  const lines=unfoldIcs(text).split("\n");
-  const out=[];let cur=null;
-  for(const raw of lines){
-    const line=raw.trim();
-    if(line==="BEGIN:VEVENT"){cur={};}
-    else if(line==="END:VEVENT"){if(cur)out.push(cur);cur=null;}
-    else if(cur){
-      const ci=line.indexOf(":");if(ci===-1)continue;
-      const keyPart=line.substring(0,ci),value=line.substring(ci+1);
-      const [name,...params]=keyPart.split(";");
-      cur[name]={value,params};
-    }
-  }
-  return out.map(icsToEv).filter(Boolean);
+function googleConnect(){
+  D.settings.googleClientId=document.getElementById("setGClient").value.trim();save();
+  if(!D.settings.googleClientId){toast("클라이언트 ID를 먼저 입력하세요");return}
+  if(!initGoogle()){toast("구글 스크립트 로딩 중입니다. 잠시 후 다시 시도하세요");return}
+  tokenClient.requestAccessToken({prompt:gToken?"":"consent"});
 }
-function icsToEv(ev){
-  if(!ev.SUMMARY||!ev.DTSTART)return null;
-  const isAllDay=(ev.DTSTART.params||[]).some(p=>/VALUE=DATE\b/i.test(p))||/^\d{8}$/.test(ev.DTSTART.value);
-  const pDate=v=>v.substring(0,4)+"-"+v.substring(4,6)+"-"+v.substring(6,8);
-  const pTime=v=>{const c=v.replace(/Z$/,"");return c.substring(9,11)+":"+c.substring(11,13)};
-  let date,endDate,time="",endTime="";
-  if(isAllDay){
-    date=pDate(ev.DTSTART.value);endDate=date;
-    if(ev.DTEND){ // 종일 일정의 DTEND는 마지막날 +1일(배타적) → 하루 빼서 실제 종료일 계산
-      const ed=new Date(pDate(ev.DTEND.value)+"T00:00");ed.setDate(ed.getDate()-1);
-      const e2=ymd(ed);if(e2>=date)endDate=e2;
-    }
-  }else{
-    date=pDate(ev.DTSTART.value);time=pTime(ev.DTSTART.value);endDate=date;
-    if(ev.DTEND){endTime=pTime(ev.DTEND.value);const ee=pDate(ev.DTEND.value);if(ee>date)endDate=ee;}
-  }
-  const uid=(ev.UID&&ev.UID.value)||("gen-"+Date.now()+"-"+Math.random().toString(36).slice(2,8));
-  return{googleId:"ics-"+uid.replace(/[^a-zA-Z0-9-_@.]/g,"_"),
-    title:icsUnescape(ev.SUMMARY.value)||"(제목 없음)",
-    note:icsUnescape((ev.DESCRIPTION&&ev.DESCRIPTION.value)||(ev.LOCATION&&ev.LOCATION.value)||""),
-    date,endDate,time,endTime};
+async function gapiFetch(url){
+  const r=await fetch(url,{headers:{Authorization:"Bearer "+gToken}});
+  if(r.status===401){gToken=null;updateGoogleUI();throw new Error("인증이 만료되었습니다. 다시 연결하세요")}
+  if(!r.ok)throw new Error("구글 API 오류 ("+r.status+")");
+  return r.json();
 }
-async function fetchIcs(url){
-  let txt=null,lastErr=null;
-  for(const proxy of ICS_PROXIES){
-    try{
-      const u=proxy?proxy+encodeURIComponent(url):url;
-      const r=await fetch(u);if(!r.ok)throw new Error("HTTP "+r.status);
-      const t=await r.text();
-      if(t&&t.includes("BEGIN:VCALENDAR")){txt=t;break;}
-    }catch(e){lastErr=e;}
-  }
-  if(!txt)throw new Error("접속 실패: "+((lastErr&&lastErr.message)||"CORS 차단"));
-  return txt;
+function googleToEv(g){
+  const o={googleId:g.id,title:g.summary||"(제목 없음)",note:g.description||""};
+  if(g.start&&g.start.dateTime){const s=new Date(g.start.dateTime);o.date=ymd(s);
+    o.time=String(s.getHours()).padStart(2,"0")+":"+String(s.getMinutes()).padStart(2,"0");
+    if(g.end&&g.end.dateTime){const en=new Date(g.end.dateTime);o.endTime=String(en.getHours()).padStart(2,"0")+":"+String(en.getMinutes()).padStart(2,"0");
+      // multi-day timed event: if end falls on a later day, span to that day (midnight end = previous day)
+      let ed=ymd(en);if((en.getHours()===0&&en.getMinutes()===0)){const p=new Date(en);p.setDate(p.getDate()-1);ed=ymd(p);}
+      if(ed>o.date)o.endDate=ed;}
+    else o.endTime="";}
+  else{o.date=(g.start&&g.start.date)||todayStr();o.time="";o.endTime="";
+    // all-day event: g.end.date is exclusive, so last day = end - 1
+    if(g.end&&g.end.date){const en=new Date(g.end.date+"T00:00");en.setDate(en.getDate()-1);const ed=ymd(en);if(ed>o.date)o.endDate=ed;}}
+  return o;
 }
-function applyIcs(text,sourceLabel){
-  const incoming=parseIcs(text);
-  if(!incoming.length)throw new Error("일정을 찾지 못했습니다 (.ics 형식 확인)");
-  // 사용자가 수정한 일정은 보존, 숨긴 일정은 다시 가져오지 않음
-  const prev=D.gcal||[];
-  const modified=prev.filter(e=>e.userModified);
-  const modIds=new Set(modified.map(e=>e.googleId));
-  const deleted=new Set(D.settings.gcalDeleted||[]);
-  const merged=[...modified];
-  for(const ev of incoming){
-    if(modIds.has(ev.googleId))continue; // 수정본 유지
-    if(deleted.has(ev.googleId))continue; // 사용자가 숨김
-    merged.push(ev);
-  }
-  D.gcal=merged;
-  D.settings.lastSync=new Date().toLocaleString("ko-KR");
-  save();renderCal();updateGoogleUI();
-  toast("구글 캘린더를 가져왔습니다 (총 "+merged.length+"건)");
-}
+const CAL="https://www.googleapis.com/calendar/v3/calendars/primary/events";
 async function importGoogle(silent){
-  const url=(document.getElementById("setGIcs")?document.getElementById("setGIcs").value.trim():"")||D.settings.googleIcsUrl;
-  if(!url){if(!silent)toast("iCal(.ics) 주소를 먼저 입력하세요");return}
-  D.settings.googleIcsUrl=url;save();
+  if(!gToken){if(!silent)toast("먼저 구글 계정에 연결하세요");return}
   const st=document.getElementById("gSyncStatus");if(st)st.textContent="가져오는 중...";
   try{
-    const txt=await fetchIcs(url);
-    applyIcs(txt);
-  }catch(e){if(st)st.textContent="가져오기 실패";if(!silent)toast(e.message||"가져오기 실패")}
-}
-function importIcsFile(ev){
-  const f=ev.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=()=>{try{applyIcs(r.result);}catch(e){toast(e.message||"가져오기 실패")}};
-  r.readAsText(f);ev.target.value="";
-}
-function useHolidayIcs(){
-  const url="https://calendar.google.com/calendar/ical/ko.south_korea%23holiday%40group.v.calendar.google.com/public/basic.ics";
-  document.getElementById("setGIcs").value=url;D.settings.googleIcsUrl=url;save();importGoogle();
+    const min=new Date();min.setDate(min.getDate()-60);
+    const max=new Date();max.setDate(max.getDate()+180);
+    const url=CAL+"?singleEvents=true&orderBy=startTime&maxResults=2500&timeMin="+min.toISOString()+"&timeMax="+max.toISOString();
+    const data=await gapiFetch(url);
+    D.gcal=(data.items||[]).filter(g=>g.status!=="cancelled").map(googleToEv);
+    D.settings.lastSync=new Date().toLocaleString("ko-KR");
+    save();renderCal();updateGoogleUI();
+    if(!silent)toast("구글 캘린더를 가져왔습니다 ("+D.gcal.length+"건)");
+  }catch(e){if(st)st.textContent="가져오기 실패";toast(e.message||"가져오기 실패")}
 }
 function updateGoogleUI(){
-  const conn=!!(D.settings.googleIcsUrl);
-  const badge=document.getElementById("gStatus");if(badge){badge.textContent=conn?"● 주소 설정됨":"○ 연결 안됨";badge.style.color=conn?"var(--green)":"var(--ink-faint)"}
+  const conn=!!gToken;
+  const badge=document.getElementById("gStatus");if(badge){badge.textContent=conn?"● 연결됨":"○ 연결 안됨";badge.style.color=conn?"var(--green)":"var(--ink-faint)"}
   const ls=document.getElementById("gSyncStatus");if(ls)ls.textContent=D.settings.lastSync?("마지막 가져오기: "+D.settings.lastSync+" · "+((D.gcal||[]).length)+"건"):"아직 가져오지 않음";
+  const cb=document.getElementById("gConnectBtn");if(cb)cb.textContent=conn?"재연결":"구글 계정 연결";
 }
 
 /* ============ 아침 할일 알림 ============ */
@@ -1214,7 +1002,7 @@ function testReminder(){fireReminder()}
 /* ============ Init ============ */
 load();applyTheme();renderToday();startReminder();
 document.getElementById("taskDate")&&(document.getElementById("taskDate").value=todayStr());
-window.addEventListener("load",()=>{if(D.settings.googleIcsUrl)setTimeout(()=>importGoogle(true),800)});
+window.addEventListener("load",()=>{setTimeout(initGoogle,800)});
 </script>
 </body>
 </html>
