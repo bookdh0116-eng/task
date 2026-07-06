@@ -103,9 +103,11 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .section-title .count{background:var(--accent-soft);color:var(--accent);font-size:12px;padding:1px 8px;border-radius:20px;font-weight:700}
 [data-theme="dark"] .section-title .count{color:var(--accent)}
 
-.add-bar{display:flex;gap:8px;margin-bottom:16px}
-.add-bar input{flex:1;padding:13px 15px;background:var(--card);border:1px solid var(--line);border-radius:12px;outline:none;font-size:15px}
+.add-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.add-bar input{flex:1;min-width:180px;padding:13px 15px;background:var(--card);border:1px solid var(--line);border-radius:12px;outline:none;font-size:15px}
 .add-bar input:focus{border-color:var(--accent)}
+.add-bar select{padding:13px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px;color:var(--ink);cursor:pointer}
+.add-bar select:focus{border-color:var(--accent)}
 
 .todo{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;background:var(--card);
   border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:9px;transition:.15s;position:relative;overflow:hidden}
@@ -247,6 +249,8 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
     </div>
     <button class="nav-btn active" data-page="today" onclick="go('today')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> 오늘 할일</button>
+    <button class="nav-btn" data-page="all" onclick="go('all')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> 전체 할일</button>
     <button class="nav-btn" data-page="calendar" onclick="go('calendar')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 월간 캘린더</button>
     <button class="nav-btn" data-page="stats" onclick="go('stats')">
@@ -294,6 +298,37 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
           <div id="doneList"></div>
         </div>
       </div>
+    </section>
+
+    <!-- ===== ALL TASKS ===== -->
+    <section class="page" id="page-all">
+      <div class="page-head">
+        <div><div class="title">전체 할일</div><div class="sub" id="allSub">모든 할일을 한곳에서 관리하세요</div></div>
+        <button class="btn accent desktop-only" onclick="openTaskModal()">+ 할일 추가</button>
+      </div>
+      <div class="add-bar">
+        <input id="allSearch" placeholder="할일 검색 (제목·태그)" oninput="renderAll()">
+        <select id="allStatus" onchange="renderAll()">
+          <option value="all">전체 상태</option>
+          <option value="open">미완료</option>
+          <option value="done">완료</option>
+          <option value="overdue">지남(미완료)</option>
+        </select>
+        <select id="allPrio" onchange="renderAll()">
+          <option value="all">전체 우선순위</option>
+          <option value="q1">긴급·중요</option>
+          <option value="q2">중요·여유</option>
+          <option value="q3">긴급·사소</option>
+          <option value="q4">나중에</option>
+        </select>
+        <select id="allSort" onchange="renderAll()">
+          <option value="date-desc">최신 날짜순</option>
+          <option value="date-asc">오래된 날짜순</option>
+          <option value="prio">우선순위순</option>
+        </select>
+      </div>
+      <div class="section-title">할일 <span class="count" id="cntAll">0</span></div>
+      <div id="allList"></div>
     </section>
 
     <!-- ===== CALENDAR ===== -->
@@ -412,6 +447,7 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 <!-- mobile nav -->
 <nav class="mob-nav">
   <button class="active" data-page="today" onclick="go('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>오늘</button>
+  <button data-page="all" onclick="go('all')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>전체</button>
   <button data-page="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>캘린더</button>
   <button data-page="stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/></svg>통계</button>
   <button data-page="admin" onclick="go('admin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82M4.6 9a1.65 1.65 0 00-.33-1.82"/></svg>관리자</button>
@@ -544,6 +580,7 @@ function go(p){
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.getElementById("page-"+p).classList.add("active");
   document.querySelectorAll(".nav-btn,.mob-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
+  if(p==="all")renderAll();
   if(p==="calendar")renderCal();
   if(p==="stats")renderStats();
   if(p==="admin")renderAdmin();
@@ -582,21 +619,29 @@ function saveTask(){
     tags:document.getElementById("taskTags").value.split(",").map(s=>s.trim()).filter(Boolean)};
   if(id){Object.assign(D.tasks.find(t=>t.id===id),obj)}
   else{D.tasks.push(Object.assign({id:uid(),done:false,createdAt:Date.now(),completedAt:null},obj))}
-  save();closeModal("taskOverlay");renderToday();if(document.getElementById("page-calendar").classList.contains("active"))renderCal();
+  save();closeModal("taskOverlay");renderToday();refreshViews();
   toast("저장되었습니다");
 }
-function toggleTask(id){const t=D.tasks.find(t=>t.id===id);t.done=!t.done;t.completedAt=t.done?Date.now():null;save();renderToday()}
-function delTask(id){D.tasks=D.tasks.filter(t=>t.id!==id);save();renderToday()}
+function toggleTask(id){const t=D.tasks.find(t=>t.id===id);t.done=!t.done;t.completedAt=t.done?Date.now():null;save();renderToday();refreshViews()}
+function delTask(id){D.tasks=D.tasks.filter(t=>t.id!==id);save();renderToday();refreshViews()}
 
 function taskHTML(t){
   const cc=catColor(t.category);
+  const P=PRIO[t.priority]||PRIO.q2;
   const tags=(t.tags||[]).map(x=>`<span class="tag">#${esc(x)}</span>`).join("");
-  return `<div class="todo ${t.done?'done':''}" style="--pc:${PRIO[t.priority].c}">
+  let dateBadge="";
+  if(t.date&&t.date!==todayStr()){
+    const p=t.date.split("-");const md=(+p[1])+"/"+(+p[2]);
+    const overdue=t.date<todayStr()&&!t.done;
+    dateBadge=`<span class="tag" style="color:${overdue?'var(--red)':'var(--ink-faint)'}${overdue?';font-weight:700':''}">${overdue?'⏰ 지남 ':'📅 '}${md}</span>`;
+  }
+  return `<div class="todo ${t.done?'done':''}" style="--pc:${P.c}">
     <button class="check" onclick="toggleTask('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 6"/></svg></button>
     <div class="t-body"><div class="t-title">${esc(t.title)}</div>
       <div class="t-meta">
+        ${dateBadge}
         ${t.category?`<span class="tag cat" style="background:${cc}">${esc(t.category)}</span>`:""}
-        <span class="tag" style="color:${PRIO[t.priority].c}">${PRIO[t.priority].n}</span>
+        <span class="tag" style="color:${P.c}">${P.n}</span>
         ${tags}
       </div></div>
     <div class="t-actions">
@@ -608,7 +653,7 @@ const prioOrder={q1:0,q2:1,q3:2,q4:3};
 function renderToday(){
   generateRepeats();
   const ts=D.tasks.filter(t=>t.date===todayStr());
-  const open=ts.filter(t=>!t.done).sort((a,b)=>prioOrder[a.priority]-prioOrder[b.priority]);
+  const open=ts.filter(t=>!t.done).sort((a,b)=>(prioOrder[a.priority]??9)-(prioOrder[b.priority]??9));
   const done=ts.filter(t=>t.done);
   document.getElementById("openList").innerHTML=open.length?open.map(taskHTML).join(""):emptyHTML("할 일이 없습니다. 위에서 추가해 보세요.");
   document.getElementById("doneList").innerHTML=done.length?done.map(taskHTML).join(""):emptyHTML("완료한 일이 여기에 표시됩니다.");
@@ -626,6 +671,30 @@ function renderToday(){
 function weekDoneCount(){const now=new Date();const day=(now.getDay()+6)%7;const mon=new Date(now);mon.setDate(now.getDate()-day);mon.setHours(0,0,0,0);
   return D.tasks.filter(t=>t.done&&t.completedAt&&t.completedAt>=mon.getTime()).length}
 function emptyHTML(msg){return `<div class="empty card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><div>${msg}</div></div>`}
+function refreshViews(){
+  if(document.getElementById("page-all").classList.contains("active"))renderAll();
+  if(document.getElementById("page-calendar").classList.contains("active"))renderCal();
+}
+function renderAll(){
+  const q=(document.getElementById("allSearch").value||"").trim().toLowerCase();
+  const status=document.getElementById("allStatus").value;
+  const prio=document.getElementById("allPrio").value;
+  const sort=document.getElementById("allSort").value;
+  const today=todayStr();
+  let list=D.tasks.slice();
+  if(q)list=list.filter(t=>(t.title||"").toLowerCase().includes(q)||(t.tags||[]).some(x=>(x||"").toLowerCase().includes(q)));
+  if(prio!=="all")list=list.filter(t=>t.priority===prio);
+  if(status==="open")list=list.filter(t=>!t.done);
+  else if(status==="done")list=list.filter(t=>t.done);
+  else if(status==="overdue")list=list.filter(t=>!t.done&&t.date&&t.date<today);
+  if(sort==="date-asc")list.sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+  else if(sort==="prio")list.sort((a,b)=>((prioOrder[a.priority]??9)-(prioOrder[b.priority]??9))||(b.date||"").localeCompare(a.date||""));
+  else list.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const done=D.tasks.filter(t=>t.done).length;
+  document.getElementById("cntAll").textContent=list.length;
+  document.getElementById("allSub").textContent="총 "+D.tasks.length+"개 · 완료 "+done+"개 · 미완료 "+(D.tasks.length-done)+"개";
+  document.getElementById("allList").innerHTML=list.length?list.map(taskHTML).join(""):emptyHTML("조건에 맞는 할일이 없습니다.");
+}
 
 /* ============ Repeats ============ */
 function generateRepeats(){
