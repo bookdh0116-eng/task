@@ -348,6 +348,10 @@ table.grid td:last-child,table.grid th:last-child{border-right:0}
 .saved.on{opacity:1}
 textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);border:1px solid var(--line);
   border-radius:10px;padding:10px;width:100%;outline:none;resize:vertical}
+.scopebox{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 13px 10px}
+.scopebox .field{margin-bottom:0}
+.grp{font-size:11.5px;font-weight:700;color:var(--ink-faint);min-width:50px;letter-spacing:.02em}
+.scopebox select{background:var(--card)}
 
 /* ===== Modal / sheet ===== */
 .overlay{position:fixed;inset:0;background:rgba(30,25,18,.45);
@@ -741,15 +745,29 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         <div class="admin-card card wide">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg> 백업 · 다른 기기로 옮기기</h3>
           <div class="desc">시간표·할일·기록이 모두 이 기기의 브라우저에 자동 저장됩니다. 다른 기기로 옮기려면 아래 내용을 복사해 그 기기의 같은 칸에 붙여넣고 <b>붙여넣은 내용 불러오기</b>를 누르세요.</div>
-          <p class="note" id="dataStat" style="margin-bottom:8px"></p>
-          <textarea id="jsonBox" class="code" rows="6" spellcheck="false" aria-label="통합 데이터"></textarea>
-          <div class="btnrow">
+          <div class="scopebox">
+            <div class="field" style="margin-bottom:8px">
+              <label>내보낼 범위</label>
+              <select id="exportScope" onchange="refreshJsonBox()">
+                <option value="full">전체 — 시간표 + 할일·일정</option>
+                <option value="timetable">시간표만 — 수업 기록·교시 할일 포함</option>
+                <option value="work">할일·일정만 — 업무 할일·일정·반복 템플릿</option>
+              </select>
+            </div>
+            <p class="note" id="scopeHint"></p>
+          </div>
+          <p class="note" id="dataStat" style="margin:10px 0 8px"></p>
+          <textarea id="jsonBox" class="code" rows="6" spellcheck="false" aria-label="백업 데이터"></textarea>
+          <div class="btnrow"><span class="grp">내보내기</span>
             <button class="btn accent sm" onclick="copyJson()">복사하기</button>
-            <button class="btn sm" onclick="applyJson()">붙여넣은 내용 불러오기</button>
-            <button class="btn ghost sm" onclick="document.getElementById('importFile').click()">파일에서 불러오기</button>
             <button class="btn ghost sm" onclick="exportData()">파일로 저장 (.json)</button>
+          </div>
+          <div class="btnrow"><span class="grp">불러오기</span>
+            <button class="btn sm" onclick="applyJson()">붙여넣은 내용 불러오기</button>
+            <button class="btn sm" onclick="document.getElementById('importFile').click()">파일에서 불러오기</button>
             <input type="file" id="importFile" accept="application/json,.json,.txt" class="hidden" onchange="importData(event)">
           </div>
+          <p class="note" style="margin-top:10px">불러오기는 <b>파일이 담고 있는 범위만</b> 덮어씁니다. 시간표 백업을 불러와도 할일·일정은 그대로 남고, 할일 백업을 불러와도 시간표와 수업 기록은 그대로 남습니다. 테마·알림 같은 설정은 언제나 지금 이 기기 것을 유지합니다.</p>
           <div class="btnrow" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
             <button class="btn ghost sm" onclick="importLegacy()">이전 두 프로그램 데이터 가져오기</button>
             <button class="btn danger sm" onclick="clearLogs()">수업 기록만 전부 삭제</button>
@@ -947,60 +965,106 @@ function load(){
   var raw=null;
   try{ raw=localStorage.getItem(KEY); }catch(e){}
   if(raw){ try{ return normalize(JSON.parse(raw)); }catch(e){} }
-  var merged=fromLegacy(defaults());
+  var merged=fromLegacy(defaults(),true);
   return merged;
 }
-/* ---- 이전 두 프로그램 데이터 가져오기 ---- */
-function fromLegacy(base){
-  var got=0;
-  /* 시간표 앱 */
+/* =========================================================
+   영역(도메인) 분리
+   · 시간표 영역 : title/days/grades/periods/cells/mine/cellNotes/dayRec + 수업에 연결된 할 일
+   · 할일 영역   : 일반 할 일 / 일정 / 구글 일정 / 반복 템플릿 / 카테고리
+   · 설정        : 어느 백업을 불러와도 "이 기기" 것을 유지 (첫 자동 이관 때만 예외)
+   백업을 불러오면 그 백업이 담고 있는 영역만 덮어쓰고 나머지 영역은 그대로 둔다.
+   ========================================================= */
+function ensureCoreCats(t){
+  if(!t.categories||!t.categories.length)t.categories=[{name:"수업",color:"#c4622d"}];
+  if(!t.categories.some(function(c){ return c.name==="수업"; }))
+    t.categories.unshift({name:"수업",color:"#c4622d"});
+}
+function applyTimetable(src,target){
+  var t=target||D;
+  if(src.title)t.title=src.title;
+  if(src.days&&src.days.length)t.days=src.days.slice();
+  if(src.grades&&src.grades.length)t.grades=src.grades.slice();
+  if(src.periods&&src.periods.length)t.periods=src.periods.slice();
+  t.cells=src.cells||{}; t.mine=src.mine||{}; t.cellNotes=src.cellNotes||{}; t.dayRec=src.dayRec||{};
+  t.tasks=(t.tasks||[]).filter(function(x){ return !x.link; }).concat(src.classTasks||[]);
+  ensureCoreCats(t);
+}
+function applyWork(src,target){
+  var t=target||D;
+  t.tasks=(t.tasks||[]).filter(function(x){ return !!x.link; }).concat(src.tasks||[]);
+  t.events=(src.events||[]).slice();
+  t.gcal=(src.gcal||[]).slice();
+  t.templates=(src.templates||[]).slice();
+  if(src.categories&&src.categories.length)t.categories=src.categories.slice();
+  ensureCoreCats(t);
+}
+/* 예전 「시간표」 파일/저장소 → 시간표 영역 */
+function ttFromLegacy(tt){
+  var o={title:tt.title||"",days:tt.days||null,grades:tt.grades||null,periods:tt.periods||null,
+    cells:tt.cells||{},mine:tt.mine||{},cellNotes:tt.cellNotes||{},dayRec:{},classTasks:[]};
+  Object.keys(tt.log||{}).forEach(function(date){
+    var r=tt.log[date]||{}, rec={label:r.label||"",swap:r.swap||{},notes:{}};
+    Object.keys(r.notes||{}).forEach(function(k){
+      var n=r.notes[k]||{}, a=k.split("-"), p=+a[0], g=+a[1];
+      if((n.t||"").trim())rec.notes[k]={t:n.t};
+      (n.todo||[]).forEach(function(item){
+        if(!(item.s||"").trim())return;
+        o.classTasks.push({id:uid(),title:item.s,date:date,done:!!item.d,priority:"q2",category:"수업",
+          tags:["수업"],link:{p:p,g:g},createdAt:Date.now(),completedAt:item.d?Date.now():null});
+      });
+    });
+    o.dayRec[date]=rec;
+  });
+  return o;
+}
+/* 예전 「시간관리」 파일/저장소 → 할일 영역 */
+function workFromLegacy(tm){
+  return {
+    tasks:(tm.tasks||[]).map(function(t){
+      return {id:t.id||uid(),title:t.title||"",date:t.date||todayStr(),done:!!t.done,
+        priority:t.priority||"q2",category:t.category||"",tags:t.tags||[],link:null,
+        tplId:t.tplId||null,createdAt:t.createdAt||Date.now(),completedAt:t.completedAt||null};
+    }),
+    events:(tm.events||[]).slice(), gcal:(tm.gcal||[]).slice(),
+    templates:(tm.templates||[]).slice(), categories:(tm.categories||[]).slice()
+  };
+}
+/* 불러온 JSON이 어느 영역을 담고 있는지 판별 */
+function readPayload(obj){
+  if(!obj||typeof obj!=="object")return null;
+  if(obj.kind==="timetable"&&obj.cells)return {kind:"timetable",tt:obj};
+  if(obj.kind==="work")return {kind:"work",work:obj};
+  if(obj.cells&&obj.tasks){                      /* 통합 백업 (이 프로그램 전체) */
+    return {kind:"full",
+      tt:{title:obj.title,days:obj.days,grades:obj.grades,periods:obj.periods,
+        cells:obj.cells,mine:obj.mine,cellNotes:obj.cellNotes,dayRec:obj.dayRec||{},
+        classTasks:(obj.tasks||[]).filter(function(t){ return !!t.link; })},
+      work:{tasks:(obj.tasks||[]).filter(function(t){ return !t.link; }),
+        events:obj.events,gcal:obj.gcal,templates:obj.templates,categories:obj.categories}};
+  }
+  if(obj.cells&&obj.periods)return {kind:"timetable",tt:ttFromLegacy(obj)};   /* 예전 시간표 백업 */
+  if(obj.tasks||obj.events)return {kind:"work",work:workFromLegacy(obj)};     /* 예전 시간관리 백업 */
+  return null;
+}
+/* 이 브라우저에 남아 있는 예전 두 프로그램 저장소에서 가져오기 */
+function fromLegacy(base,withSettings){
+  var got=[];
   try{
     var tt=JSON.parse(localStorage.getItem(OLD_TT)||"null");
-    if(tt&&tt.cells&&tt.periods){
-      base.title=tt.title||base.title;
-      base.days=tt.days||base.days;
-      base.grades=tt.grades||base.grades;
-      base.periods=tt.periods;
-      base.cells=tt.cells||{};
-      base.mine=tt.mine||{};
-      base.cellNotes=tt.cellNotes||{};
-      var log=tt.log||{};
-      Object.keys(log).forEach(function(date){
-        var r=log[date]||{}; var rec={label:r.label||"",swap:r.swap||{},notes:{}};
-        Object.keys(r.notes||{}).forEach(function(k){
-          var n=r.notes[k]||{}; var a=k.split("-"); var p=+a[0], g=+a[1];
-          if((n.t||"").trim()) rec.notes[k]={t:n.t};
-          (n.todo||[]).forEach(function(item){
-            if(!(item.s||"").trim())return;
-            base.tasks.push({id:uid(),title:item.s,date:date,done:!!item.d,priority:"q2",
-              category:"수업",tags:["수업"],link:{p:p,g:g},createdAt:Date.now(),
-              completedAt:item.d?Date.now():null});
-          });
-        });
-        base.dayRec[date]=rec;
-      });
-      got++;
-    }
+    if(tt&&tt.cells&&tt.periods){ applyTimetable(ttFromLegacy(tt),base); got.push("시간표"); }
   }catch(e){}
-  /* 시간관리 앱 */
   try{
     var tm=JSON.parse(localStorage.getItem(OLD_TM)||"null");
     if(tm&&tm.tasks){
-      (tm.tasks||[]).forEach(function(t){
-        base.tasks.push({id:t.id||uid(),title:t.title||"",date:t.date||todayStr(),done:!!t.done,
-          priority:t.priority||"q2",category:t.category||"",tags:t.tags||[],link:null,
-          tplId:t.tplId||null,createdAt:t.createdAt||Date.now(),completedAt:t.completedAt||null});
-      });
-      base.events=(tm.events||[]).slice();
-      base.gcal=(tm.gcal||[]).slice();
-      base.templates=(tm.templates||[]).slice();
-      (tm.categories||[]).forEach(function(c){
-        if(!base.categories.some(function(x){return x.name===c.name;})) base.categories.push(c); });
-      if(tm.settings) base.settings=Object.assign(base.settings,tm.settings,{mineOnly:base.settings.mineOnly,calShowCls:base.settings.calShowCls});
-      got++;
+      applyWork(workFromLegacy(tm),base); got.push("시간관리");
+      if(withSettings&&tm.settings){
+        ["theme","accent","start","end","workdays","tz","googleClientId","reminderOn","reminderTime"]
+          .forEach(function(k){ if(tm.settings[k]!==undefined)base.settings[k]=tm.settings[k]; });
+      }
     }
   }catch(e){}
-  base._legacy=got;
+  base._legacy=got.join(" · ");
   return base;
 }
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){} flashSaved(); }
@@ -2141,11 +2205,13 @@ function renderAdmin(){
 
   var logs=collectLogs().filter(function(o){ return (o.text||"").trim(); });
   var bytes=new Blob([JSON.stringify(D)]).size;
-  document.getElementById("dataStat").textContent=
-    "할일 "+D.tasks.length+"개 (수업 연결 "+D.tasks.filter(function(t){return !!t.link;}).length+") · 일정 "+D.events.length+
-    " · 수업 기록 "+logs.length+"건 · 고정 메모 "+Object.keys(D.cellNotes).length+
-    "개 · 템플릿 "+D.templates.length+" ("+(bytes/1024).toFixed(1)+" KB)";
-  document.getElementById("jsonBox").value=JSON.stringify(D,null,1);
+  var clsT=D.tasks.filter(function(t){ return !!t.link; }).length;
+  document.getElementById("dataStat").innerHTML=
+    "<b>시간표 영역</b> 수업 기록 "+logs.length+"건 · 교시 할일 "+clsT+"개 · 고정 메모 "+Object.keys(D.cellNotes).length+
+    "개 · 기록된 날짜 "+Object.keys(D.dayRec).length+"일<br>"+
+    "<b>할일 영역</b> 업무 할일 "+(D.tasks.length-clsT)+"개 · 일정 "+D.events.length+"개 · 반복 템플릿 "+D.templates.length+
+    "개 · 카테고리 "+D.categories.length+"개 &nbsp;("+(bytes/1024).toFixed(1)+" KB)";
+  refreshJsonBox();
 }
 function toggleTheme(){
   D.settings.theme=D.settings.theme==="dark"?"light":"dark";
@@ -2311,78 +2377,55 @@ function saveTpl(){
 function delTpl(id){ D.templates=D.templates.filter(function(t){ return t.id!==id; }); save(); renderAdmin(); }
 
 /* 백업 */
+/* ---- 내보내기 : 전체 / 시간표만 / 할일·일정만 ---- */
+function exportScopeVal(){
+  var el=document.getElementById("exportScope");
+  return el?el.value:"full";
+}
+function scopeName(k){ return {full:"전체",timetable:"시간표",work:"할일·일정"}[k]||"전체"; }
+function buildExport(scope){
+  if(scope==="timetable")
+    return {app:"school_wf",kind:"timetable",v:1,savedAt:todayStr(),
+      title:D.title,days:D.days,grades:D.grades,periods:D.periods,
+      cells:D.cells,mine:D.mine,cellNotes:D.cellNotes,dayRec:D.dayRec,
+      classTasks:D.tasks.filter(function(t){ return !!t.link; })};
+  if(scope==="work")
+    return {app:"school_wf",kind:"work",v:1,savedAt:todayStr(),
+      tasks:D.tasks.filter(function(t){ return !t.link; }),
+      events:D.events,gcal:D.gcal,templates:D.templates,categories:D.categories};
+  var full=JSON.parse(JSON.stringify(D));
+  full.app="school_wf"; full.kind="full"; full.savedAt=todayStr();
+  return full;
+}
+function refreshJsonBox(){
+  var box=document.getElementById("jsonBox");
+  if(box)box.value=JSON.stringify(buildExport(exportScopeVal()),null,1);
+  var hint=document.getElementById("scopeHint");
+  if(hint)hint.textContent={
+    full:"시간표와 할일·일정을 모두 담습니다. 새 기기에 처음 옮길 때 쓰세요.",
+    timetable:"시간표·담당 수업·수업 기록·교시 할 일만 담습니다. 불러와도 할일·일정은 그대로 남습니다.",
+    work:"업무 할 일·일정·반복 템플릿·카테고리만 담습니다. 불러와도 시간표와 수업 기록은 그대로 남습니다."
+  }[exportScopeVal()];
+}
 function exportData(){
-  var json=JSON.stringify(D,null,1);
-  var name="학교업무_백업_"+todayStr()+".json";
+  var scope=exportScopeVal();
+  var json=JSON.stringify(buildExport(scope),null,1);
+  var tag={full:"전체",timetable:"시간표",work:"할일일정"}[scope];
+  var name="학교업무_"+tag+"_백업_"+todayStr()+".json";
   try{
     var blob=new Blob([json],{type:"application/json"});
     var a=document.createElement("a");
     a.href=URL.createObjectURL(blob); a.download=name;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function(){ URL.revokeObjectURL(a.href); },2000);
-    toast("백업 파일을 내보냈습니다");
+    toast(scopeName(scope)+" 백업 파일을 내보냈습니다");
   }catch(e){ toast("파일 저장이 막혀 있습니다. ‘복사하기’를 이용해 주세요"); }
-}
-function importData(ev){
-  var f=ev.target.files&&ev.target.files[0]; if(!f)return;
-  var r=new FileReader();
-  r.onload=function(){ applyImported(String(r.result)); };
-  r.readAsText(f); ev.target.value="";
-}
-function applyImported(text){
-  try{
-    var obj=JSON.parse(text);
-    if(!obj)throw 0;
-    if(obj.cells&&obj.periods&&!obj.tasks&&!obj.dayRec){          /* 예전 시간표 파일 */
-      var b=defaults(); b.tasks=[];
-      D=normalize(fromLegacyObjects(obj,null,b));
-    }else if(obj.tasks&&!obj.cells){                               /* 예전 시간관리 파일 */
-      var b2=defaults(); b2.tasks=[];
-      D=normalize(fromLegacyObjects(null,obj,b2));
-    }else{ D=normalize(obj); }
-    save(); applyTheme(); selDate=defaultDate(); go("admin"); toast("데이터를 불러왔습니다");
-  }catch(e){ toast("올바른 백업 파일이 아닙니다"); }
-}
-function fromLegacyObjects(tt,tm,base){
-  if(tt&&tt.cells&&tt.periods){
-    base.title=tt.title||base.title;
-    base.days=tt.days||base.days;
-    base.grades=tt.grades||base.grades;
-    base.periods=tt.periods;
-    base.cells=tt.cells||{}; base.mine=tt.mine||{}; base.cellNotes=tt.cellNotes||{};
-    Object.keys(tt.log||{}).forEach(function(date){
-      var r=tt.log[date]||{}, rec={label:r.label||"",swap:r.swap||{},notes:{}};
-      Object.keys(r.notes||{}).forEach(function(k){
-        var n=r.notes[k]||{}, a=k.split("-"), p=+a[0], g=+a[1];
-        if((n.t||"").trim())rec.notes[k]={t:n.t};
-        (n.todo||[]).forEach(function(item){
-          if(!(item.s||"").trim())return;
-          base.tasks.push({id:uid(),title:item.s,date:date,done:!!item.d,priority:"q2",category:"수업",
-            tags:["수업"],link:{p:p,g:g},createdAt:Date.now(),completedAt:item.d?Date.now():null});
-        });
-      });
-      base.dayRec[date]=rec;
-    });
-  }
-  if(tm&&tm.tasks){
-    (tm.tasks||[]).forEach(function(t){
-      base.tasks.push({id:t.id||uid(),title:t.title||"",date:t.date||todayStr(),done:!!t.done,
-        priority:t.priority||"q2",category:t.category||"",tags:t.tags||[],link:null,
-        tplId:t.tplId||null,createdAt:t.createdAt||Date.now(),completedAt:t.completedAt||null});
-    });
-    base.events=(tm.events||[]).slice();
-    base.gcal=(tm.gcal||[]).slice();
-    base.templates=(tm.templates||[]).slice();
-    (tm.categories||[]).forEach(function(c){
-      if(!base.categories.some(function(x){ return x.name===c.name; }))base.categories.push(c); });
-    if(tm.settings)base.settings=Object.assign(base.settings,tm.settings);
-  }
-  return base;
 }
 function copyJson(){
   var box=document.getElementById("jsonBox");
-  box.value=JSON.stringify(D,null,1);
-  var done=function(){ toast("복사했습니다. 다른 기기의 같은 칸에 붙여넣고 ‘불러오기’를 누르세요"); };
+  refreshJsonBox();
+  var scope=exportScopeVal();
+  var done=function(){ toast(scopeName(scope)+" 내용을 복사했습니다. 다른 기기의 같은 칸에 붙여넣고 ‘불러오기’를 누르세요"); };
   if(navigator.clipboard&&navigator.clipboard.writeText)
     navigator.clipboard.writeText(box.value).then(done,function(){ manualCopy(box); });
   else manualCopy(box);
@@ -2392,13 +2435,44 @@ function manualCopy(box){
   try{ if(document.execCommand("copy")){ toast("복사했습니다"); return; } }catch(e){}
   toast("자동 복사가 막혀 있어요. 선택된 내용을 직접 복사해 주세요");
 }
+
+/* ---- 불러오기 : 백업이 담고 있는 영역만 덮어쓴다 ---- */
+function importData(ev){
+  var f=ev.target.files&&ev.target.files[0]; if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){ applyImported(String(r.result)); };
+  r.readAsText(f); ev.target.value="";
+}
 function applyJson(){ applyImported(document.getElementById("jsonBox").value); }
+function applyImported(text){
+  var obj=null;
+  try{ obj=JSON.parse(text); }catch(e){ toast("올바른 백업 파일이 아닙니다"); return; }
+  var pl=readPayload(obj);
+  if(!pl){ toast("올바른 백업 파일이 아닙니다"); return; }
+  var what=scopeName(pl.kind);
+  var keep={
+    timetable:"할일·일정과 설정은 지금 그대로 남습니다.",
+    work:"시간표·담당 수업·수업 기록은 지금 그대로 남습니다. 설정도 유지됩니다.",
+    full:"설정(테마·알림·구글 ID)은 이 기기 것을 그대로 유지합니다."
+  }[pl.kind];
+  var n=[];
+  if(pl.tt)n.push("수업 기록 "+Object.keys(pl.tt.dayRec||{}).length+"일 · 교시 할일 "+(pl.tt.classTasks||[]).length+"개");
+  if(pl.work)n.push("할일 "+((pl.work.tasks||[]).length)+"개 · 일정 "+((pl.work.events||[]).length)+"개");
+  if(!confirm("["+what+" 백업]을 불러옵니다.\n"+n.join("\n")+"\n\n지금의 "+what+" 내용은 덮어써집니다.\n"+keep))return;
+  if(pl.tt)applyTimetable(pl.tt);
+  if(pl.work)applyWork(pl.work);
+  D=normalize(D);
+  save(); applyTheme(); selDate=defaultDate();
+  if(curPage()==="admin")renderAdmin(); else go("admin");
+  toast(what+" 백업을 불러왔습니다");
+}
 function importLegacy(){
-  var b=fromLegacy(normalize(JSON.parse(JSON.stringify(D))));
-  if(!b._legacy){ toast("이 브라우저에 이전 프로그램 데이터가 없습니다"); return; }
-  if(!confirm("이전 두 프로그램(시간표 · 시간관리)의 데이터를 지금 데이터에 덮어써 가져올까요?"))return;
-  delete b._legacy;
-  D=normalize(b); save(); applyTheme(); renderAdmin(); toast("이전 데이터를 가져왔습니다");
+  var probe=fromLegacy(normalize(JSON.parse(JSON.stringify(D))),false);
+  if(!probe._legacy){ toast("이 브라우저에 이전 프로그램 데이터가 없습니다"); return; }
+  if(!confirm("이 브라우저에 남아 있는 이전 프로그램("+probe._legacy+") 데이터를 불러옵니다.\n"+
+    "해당 영역만 덮어쓰고 나머지와 설정은 그대로 둡니다. 계속할까요?"))return;
+  delete probe._legacy;
+  D=normalize(probe); save(); applyTheme(); renderAdmin(); toast("이전 데이터를 가져왔습니다");
 }
 function clearLogs(){
   if(!confirm("날짜별 수업 기록·그날 변경·학교일정을 모두 지웁니다. 시간표와 고정 메모, 할일은 남습니다."))return;
@@ -2597,7 +2671,7 @@ document.addEventListener("visibilitychange",function(){
 });
 if(D._legacy){
   var n=D._legacy; delete D._legacy; save();
-  setTimeout(function(){ toast("이전 프로그램 데이터 "+n+"개를 가져왔습니다"); },700);
+  setTimeout(function(){ toast("이전 프로그램 데이터를 가져왔습니다 ("+n+")"); },700);
 }
 </script>
 </body>
