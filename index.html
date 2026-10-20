@@ -14,6 +14,9 @@
   --accent:#c4622d; --accent-soft:#f0d9c8;
   --green:#3f7d56; --green-soft:#dcecdf;
   --red:#b8473b; --red-soft:#f6e2de; --blue:#3a6ea5; --amber:#c79a2e; --grape:#7a5a8e;
+  --blue-soft:rgba(58,110,165,.14); --grape-soft:rgba(122,90,142,.16);
+  --on-accent:#fff; --on-fill:#fff;
+  --bg-grad:radial-gradient(circle at 18% -10%,var(--accent-soft) 0,transparent 38%);
   --q1:#b8473b; --q2:#3f7d56; --q3:#c79a2e; --q4:#8b857c;
   --shadow:0 1px 2px rgba(60,45,25,.06),0 8px 24px rgba(60,45,25,.07);
   --shadow-lg:0 20px 60px rgba(60,45,25,.28);
@@ -28,16 +31,74 @@
   --accent:#e07d44; --accent-soft:#3a2c1f;
   --green:#6fb389; --green-soft:#1f2e24;
   --red:#e0806f; --red-soft:#382420;
+  --blue-soft:rgba(58,110,165,.22); --grape-soft:rgba(122,90,142,.24);
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
   --shadow-lg:0 24px 60px rgba(0,0,0,.6);
 }
+
+/* ===== 모노 (흰 바탕) ===== */
+[data-theme="mono"]{
+  --ink:#0a0a0a; --ink-soft:#565656; --ink-faint:#9b9b9b;
+  --paper:#ffffff; --card:#ffffff; --line:#e4e4e4; --line-strong:#c9c9c9;
+  --accent:#0a0a0a; --accent-soft:#f1f1f1;
+  --green:#3d3d3d; --green-soft:#efefef;
+  --red:#c62828; --red-soft:#fdeaea;
+  --blue:#5a5a5a; --blue-soft:#f1f1f1;
+  --grape:#777777; --grape-soft:#f4f4f4;
+  --amber:#8a8a8a;
+  --q1:#c62828; --q2:#2e2e2e; --q3:#777777; --q4:#b4b4b4;
+  --on-accent:#ffffff; --on-fill:#ffffff;
+  --shadow:none; --shadow-lg:0 16px 48px rgba(0,0,0,.16);
+  --radius:8px; --radius-sm:6px;
+  --bg-grad:none;
+}
+/* ===== 모노 다크 (검정 바탕) ===== */
+[data-theme="mono-dark"]{
+  --ink:#f5f5f5; --ink-soft:#a8a8a8; --ink-faint:#6e6e6e;
+  --paper:#000000; --card:#131313; --line:#2b2b2b; --line-strong:#454545;
+  --accent:#f5f5f5; --accent-soft:#232323;
+  --green:#c6c6c6; --green-soft:#1e1e1e;
+  --red:#ff6b6b; --red-soft:#2e1616;
+  --blue:#a0a0a0; --blue-soft:#1e1e1e;
+  --grape:#8c8c8c; --grape-soft:#1e1e1e;
+  --amber:#9a9a9a;
+  --q1:#ff6b6b; --q2:#e0e0e0; --q3:#9a9a9a; --q4:#5e5e5e;
+  --on-accent:#0a0a0a; --on-fill:#0a0a0a;
+  --shadow:none; --shadow-lg:0 16px 48px rgba(0,0,0,.8);
+  --radius:8px; --radius-sm:6px;
+  --bg-grad:none;
+}
+/* 모노 공통 — 더 각지고 평평하게 */
+[data-theme^="mono"] .card,[data-theme^="mono"] .todo,[data-theme^="mono"] .ccard,
+[data-theme^="mono"] .logitem,[data-theme^="mono"] .tablewrap,[data-theme^="mono"] .cal-bg{box-shadow:none}
+[data-theme^="mono"] .btn{border-radius:6px}
+[data-theme^="mono"] .btn:hover{transform:none;box-shadow:none;opacity:.86}
+[data-theme^="mono"] .chip,[data-theme^="mono"] .pchip,[data-theme^="mono"] .tag,
+[data-theme^="mono"] .daypick,[data-theme^="mono"] .daypick button{border-radius:5px}
+[data-theme^="mono"] .toast{border-radius:8px}
+[data-theme^="mono"] .modal{border-radius:10px}
+[data-theme^="mono"] .cal-bg,[data-theme^="mono"] .cal-bar{border-radius:4px}
+[data-theme^="mono"] .cal-dnum.todaynum{border-radius:4px}
+[data-theme^="mono"] .check{border-radius:4px}
+[data-theme^="mono"] .stat .v,[data-theme^="mono"] .page-head .title,
+[data-theme^="mono"] .brand h1,[data-theme^="mono"] .cal-head h2,
+[data-theme^="mono"] .modal h3,[data-theme^="mono"] .panel>h2,
+[data-theme^="mono"] .sheet h3,[data-theme^="mono"] .holiday-card .hd,
+[data-theme^="mono"] .dlabel b{
+  font-family:var(--font);letter-spacing:-.03em;font-weight:700}
+[data-theme^="mono"] .brand .mark{border-radius:6px}
+[data-theme^="mono"] .slot.now{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--red)}
+[data-theme^="mono"] .ccard.mine{border-width:1px;border-color:var(--ink)}
+[data-theme^="mono"] td.mine{background:var(--accent-soft)}
+[data-theme^="mono"] .cal-bar.school{background:var(--ink);color:var(--paper)}
+[data-theme^="mono"] .toggle::after{background:var(--card)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:var(--font);background:var(--paper);color:var(--ink);
   -webkit-font-smoothing:antialiased;line-height:1.5;font-size:15px;
   -webkit-text-size-adjust:100%;
-  background-image:radial-gradient(circle at 18% -10%,var(--accent-soft) 0,transparent 38%);
+  background-image:var(--bg-grad);
   background-attachment:fixed;
 }
 button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit}
@@ -83,14 +144,14 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
 .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
 .btn.sm{padding:7px 12px;font-size:13px;border-radius:9px}
-.btn.accent{background:var(--accent);color:#fff}
+.btn.accent{background:var(--accent);color:var(--on-accent)}
 .btn.danger{background:var(--card);color:var(--red);border:1px solid var(--red)}
 .btn.full{width:100%;justify-content:center}
 .chip{border:1px solid var(--line-strong);background:var(--card);color:var(--ink-soft);
   border-radius:99px;padding:5px 13px;font-size:13px;font-weight:600;transition:.15s}
 .chip:hover{color:var(--ink);border-color:var(--ink-faint)}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.chip.accent[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.accent[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .field{display:block;margin-bottom:13px}
 .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
 .field input,.field select,.field textarea{width:100%;padding:10px 12px;background:var(--paper);
@@ -144,7 +205,7 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .pno{font-family:var(--mono);font-size:18px;font-weight:600;line-height:1}
 .ptime{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-top:5px;line-height:1.35}
 .slot.now .pno{color:var(--red)}
-.nowtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;color:#fff;background:var(--red);border-radius:4px;padding:1px 5px;margin-top:6px}
+.nowtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--on-fill);background:var(--red);border-radius:4px;padding:1px 5px;margin-top:6px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .cards.solo{grid-template-columns:1fr}
 .ccard{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);
@@ -171,6 +232,40 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .empty{text-align:center;padding:34px 18px;color:var(--ink-faint);font-size:13.5px}
 .empty svg{width:36px;height:36px;opacity:.4;margin-bottom:8px}
 
+/* ===== 학사일정 ===== */
+.pchips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 16px}
+.pchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+  padding:4px 10px;border-radius:20px;background:var(--line);color:var(--ink-soft);max-width:100%}
+.pchip i{font-style:normal;font-weight:600;font-size:11px;opacity:.75}
+.pchip.event{background:var(--card);border:1px solid var(--line-strong);color:var(--ink)}
+.pchip.exam{background:var(--grape-soft);color:var(--grape)}
+[data-theme="dark"] .pchip.exam{color:#c4a3d8}
+.pchip.creative{background:var(--blue-soft);color:var(--blue)}
+[data-theme="dark"] .pchip.creative{color:#8fb6de}
+.pchip.holiday{background:var(--red-soft);color:var(--red)}
+.swapday{font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);
+  border-radius:6px;padding:2px 7px;margin-left:2px}
+.holiday-card{padding:28px 20px;text-align:center;border-color:var(--red)}
+.holiday-card .hd{font-family:var(--display);font-size:24px;font-weight:600;color:var(--red)}
+.holiday-card .hs{font-size:13px;color:var(--ink-faint);margin-top:6px}
+.ccard.planned{border-style:dashed;border-color:var(--blue)}
+.ccard .sub.plan{color:var(--blue);font-weight:600}
+[data-theme="dark"] .ccard .sub.plan{color:#8fb6de}
+.cal-bg.holiday{background:var(--red-soft)}
+.cal-dnum.holi{color:var(--red)}
+.planrow{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:10px;margin-bottom:6px;background:var(--paper)}
+.planrow .pt{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;flex:0 0 auto;margin-top:1px}
+.planrow .pb{flex:1;min-width:0}
+.planrow .pb b{font-size:13.5px;font-weight:600;display:block}
+.planrow .pb span{font-size:11.5px;color:var(--ink-faint)}
+.daycount{width:100%;border-collapse:collapse;font-size:13px}
+.daycount th,.daycount td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:center}
+.daycount th{font-size:11.5px;color:var(--ink-faint);font-weight:600}
+.daycount td:first-child,.daycount th:first-child{text-align:left}
+.daycount .diff{color:var(--red);font-weight:700}
+.daycount tfoot td{font-weight:700;border-top:2px solid var(--line-strong)}
+
 /* ===== Todos ===== */
 .add-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .add-bar input,.add-bar select{padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;outline:none;font-size:14.5px}
@@ -186,13 +281,13 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
   display:grid;place-items:center;transition:.15s;background:var(--paper)}
 .check:hover{border-color:var(--accent)}
 .todo.done .check{background:var(--green);border-color:var(--green)}
-.check svg{width:13px;height:13px;color:#fff;opacity:0}
+.check svg{width:13px;height:13px;color:var(--on-fill);opacity:0}
 .todo.done .check svg{opacity:1}
 .t-body{flex:1;min-width:0}
 .t-title{font-size:14.5px;font-weight:500;word-break:break-word}
 .t-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;align-items:center}
 .tag{font-size:11.5px;padding:2px 8px;border-radius:20px;background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);font-weight:600}
-.tag.cat{color:#fff;border:none}
+.tag.cat{color:var(--on-fill);border:none}
 .tag.cls{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 .t-actions{display:flex;gap:3px;opacity:.35;transition:.15s}
 .todo:hover .t-actions{opacity:1}
@@ -201,7 +296,7 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .icon-btn svg{width:16px;height:16px}
 .prio-pick{display:flex;gap:6px;flex-wrap:wrap}
 .prio-pick button{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-weight:600;color:var(--ink-soft)}
-.prio-pick button.on{color:#fff;border-color:transparent}
+.prio-pick button.on{color:var(--on-fill);border-color:transparent}
 
 /* ===== Week grid ===== */
 .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
@@ -211,6 +306,11 @@ table.grid{border-collapse:separate;border-spacing:0;width:100%}
 table.grid th,table.grid td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0}
 table.grid thead th{background:var(--paper);font-weight:600;font-size:12px;color:var(--ink-soft);padding:7px 4px;text-align:center;position:sticky;top:0;z-index:3}
 table.grid thead tr:first-child th{font-size:14px;color:var(--ink);letter-spacing:.04em}
+table.grid thead th .dsub{display:block;font-size:10px;font-weight:500;color:var(--ink-faint);margin-top:1px}
+table.grid thead th.holicol{background:var(--red-soft);color:var(--red)}
+table.grid thead th.holicol .dsub{color:var(--red)}
+td.holiday{background:var(--red-soft)}
+td.holiday .subj,td.holiday .sub{opacity:.35}
 table.grid .dayend{border-right:2px solid var(--line-strong)}
 table.grid tbody th.pcol{position:sticky;left:0;z-index:5;background:var(--paper);width:44px;min-width:44px;text-align:center;padding:6px 2px;vertical-align:middle}
 table.grid thead th.pcol{position:sticky;left:0;z-index:6;width:44px;min-width:44px}
@@ -251,14 +351,20 @@ table.grid td:last-child,table.grid th:last-child{border-right:0}
 .cal-dnum{grid-row:1;font-size:13px;font-weight:600;justify-self:start;align-self:start;
   margin:7px 0 1px 8px;z-index:2;pointer-events:none}
 .cal-dnum.sun{color:var(--red)}.cal-dnum.sat{color:var(--blue)}.cal-dnum.out{opacity:.4}
-.cal-dnum.todaynum{background:var(--accent);color:#fff;width:23px;height:23px;border-radius:50%;
+.cal-dnum.todaynum{background:var(--accent);color:var(--on-accent);width:23px;height:23px;border-radius:50%;
   display:grid;place-items:center;margin:5px 0 1px 5px}
 .cal-bar{font-size:11px;font-weight:600;height:17px;line-height:17px;padding:0 6px;border-radius:6px;
   background:var(--accent-soft);color:var(--accent);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;z-index:2;pointer-events:none;align-self:center;margin:0 1px}
 .cal-bar.task{background:var(--green-soft);color:var(--green)}
-.cal-bar.gcal{background:rgba(58,110,165,.15);color:var(--blue)}
+.cal-bar.gcal{background:var(--blue-soft);color:var(--blue)}
 .cal-bar.school{background:var(--ink);color:var(--paper)}
+.cal-bar.holi{background:var(--red-soft);color:var(--red);font-weight:700}
+.cal-bar.pl-exam{background:var(--grape-soft);color:var(--grape);font-weight:700}
+[data-theme="dark"] .cal-bar.pl-exam{color:#c4a3d8}
+.cal-bar.pl-event{background:var(--line);color:var(--ink-soft)}
+.cal-bar.pl-creative{background:var(--blue-soft);color:var(--blue)}
+[data-theme="dark"] .cal-bar.pl-creative{color:#8fb6de}
 .cal-bar.cls{background:transparent;color:var(--ink-soft);border:1px dashed var(--line-strong)}
 .cal-bar.contL{border-top-left-radius:0;border-bottom-left-radius:0}
 .cal-bar.contR{border-top-right-radius:0;border-bottom-right-radius:0}
@@ -315,7 +421,7 @@ table.grid td:last-child,table.grid th:last-child{border-right:0}
 .sw.on{border-color:var(--ink)}
 .pill{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);border-radius:8px;
   padding:5px 11px;font-size:13px;font-weight:600}
-.pill.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pill.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 .times{display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:8px}
 .timerow{display:flex;align-items:center;gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:6px 8px}
 .timerow b{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap;flex:0 0 auto}
@@ -340,7 +446,7 @@ table.grid td:last-child,table.grid th:last-child{border-right:0}
 .matrix thead th{font-size:11.5px;color:var(--ink-faint);font-weight:600}
 .mcell{border:1px solid var(--line-strong);background:var(--card);width:100%;max-width:64px;border-radius:6px;
   padding:4px 0;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);font-weight:600}
-.mcell[data-state="all"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.mcell[data-state="all"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .mcell[data-state="some"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 .mcell.zero{opacity:.3;cursor:default}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
@@ -352,6 +458,24 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
 .scopebox .field{margin-bottom:0}
 .grp{font-size:11.5px;font-weight:700;color:var(--ink-faint);min-width:50px;letter-spacing:.02em}
 .scopebox select{background:var(--card)}
+
+.theme-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.theme-opt{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:10px;background:var(--paper);text-align:left;transition:.15s}
+.theme-opt:hover{border-color:var(--ink-faint)}
+.theme-opt.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.theme-opt .tp{width:30px;height:30px;border-radius:7px;flex:0 0 auto;position:relative;overflow:hidden;
+  border:1px solid var(--line-strong);background:var(--pa)}
+.theme-opt .tp::after{content:"";position:absolute;right:4px;bottom:4px;width:11px;height:11px;
+  border-radius:50%;background:var(--pc)}
+.theme-opt .tp::before{content:"";position:absolute;left:4px;top:5px;width:14px;height:3px;
+  border-radius:2px;background:var(--pi)}
+.theme-opt .tx{display:block;min-width:0}
+.theme-opt b{display:block;font-size:13px;font-weight:600;color:var(--ink)}
+.theme-opt small{display:block;font-size:11px;color:var(--ink-faint);font-weight:400}
+.sw.auto{display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--ink-soft);
+  background:var(--paper);border:1px dashed var(--line-strong);width:auto;padding:0 8px}
+.sw.auto.on{border-style:solid;border-color:var(--ink)}
 
 /* ===== Modal / sheet ===== */
 .overlay{position:fixed;inset:0;background:rgba(30,25,18,.45);
@@ -376,7 +500,7 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
 .todo-row.done input[type="text"]{text-decoration:line-through;color:var(--ink-faint)}
 .tick{flex:0 0 auto;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line-strong);
   background:var(--card);display:grid;place-items:center;font-size:12px;color:transparent;line-height:1}
-.tick[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.tick[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-fill)}
 .del{color:var(--ink-faint);font-size:16px;padding:2px 4px;flex:0 0 auto}
 .del:hover{color:var(--red)}
 .swapbox{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px}
@@ -504,6 +628,7 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         <span class="tag2">이 날 학교일정</span>
         <input type="text" id="dayLabelInput" placeholder="예) 체육대회, 중간고사 — 비워두면 표시되지 않아요">
       </div>
+      <div id="planStrip"></div>
       <p class="note" id="todayNote" style="margin:8px 2px"></p>
 
       <div class="today-grid">
@@ -597,6 +722,7 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         <button class="btn ghost sm" onclick="calToday()">오늘</button>
         <div class="spacer"></div>
         <div class="chips">
+          <button class="chip" id="calPlanBtn" aria-pressed="true" onclick="toggleCalPlan()">학사일정</button>
           <button class="chip" id="calClsBtn" aria-pressed="false" onclick="toggleCalCls()">내 수업 표시</button>
         </div>
       </div>
@@ -606,7 +732,10 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         <span><i class="swatch" style="background:var(--ink);border-color:var(--ink)"></i> 학교일정</span>
         <span><i class="swatch" style="background:var(--accent-soft);border-color:var(--accent)"></i> 일정</span>
         <span><i class="swatch" style="background:var(--green-soft);border-color:var(--green)"></i> 할일</span>
-        <span><i class="swatch" style="background:rgba(58,110,165,.15);border-color:var(--blue)"></i> 구글 캘린더</span>
+        <span><i class="swatch" style="background:var(--red-soft);border-color:var(--red)"></i> 휴업일</span>
+        <span><i class="swatch" style="background:var(--grape-soft);border-color:var(--grape)"></i> 고사</span>
+        <span><i class="swatch" style="background:var(--blue-soft);border-color:var(--blue)"></i> 창체</span>
+        <span><i class="swatch" style="background:var(--blue-soft);border-color:var(--blue)"></i> 구글 캘린더</span>
       </div>
     </section>
 
@@ -640,6 +769,8 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         <div class="chart-card card"><h3>우선순위 분포</h3><div class="chart" id="chPrio"></div><div class="lg" id="lgPrio"></div></div>
         <div class="chart-card card"><h3>카테고리별 할일</h3><div class="chart" id="chCat"></div></div>
         <div class="chart-card card"><h3>과목별 수업 기록</h3><div class="chart" id="chSubj"></div></div>
+        <div class="chart-card card chart-full"><h3>월별 수업일수 <span style="font-size:12px;font-weight:400;color:var(--ink-faint)">— 휴업일을 뺀 계산값과 학사일정표의 공식값</span></h3>
+          <div style="overflow-x:auto"><table class="daycount" id="dayCount"></table></div></div>
         <div class="chart-card card chart-full"><h3>학년별 주당 시수 · 수업 기록</h3><div class="chart" id="chGrade"></div>
           <div class="lg"><span><i style="background:var(--accent)"></i>주당 시수</span><span><i style="background:var(--blue)"></i>수업 기록 수</span></div></div>
       </div>
@@ -654,8 +785,11 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         <div class="admin-card card">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> 기본 설정</h3>
           <div class="desc">테마와 근무 정보를 설정합니다.</div>
-          <div class="field"><label>다크 모드</label><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div>
-          <div class="field"><label>강조 색상</label><div class="swatch-row" id="accentSwatches"></div></div>
+          <div class="field"><label>테마</label><div class="theme-row" id="themePick"></div></div>
+          <div class="field"><label>강조 색상 <span id="accentHint" style="color:var(--ink-faint);font-weight:400"></span></label>
+            <div class="swatch-row" id="accentSwatches"></div></div>
+          <div class="field"><label>경고 색상 <span style="color:var(--ink-faint);font-weight:400">— 휴업일 · 지금 교시 · 지난 할일 · 긴급·중요</span></label>
+            <div class="swatch-row" id="warnSwatches"></div></div>
           <div class="row">
             <div class="field"><label>근무 시작</label><input type="time" id="setStart"></div>
             <div class="field"><label>근무 종료</label><input type="time" id="setEnd"></div>
@@ -717,6 +851,28 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
         </div>
 
         <div class="admin-card card wide">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h2M14 14h2M8 18h2M14 18h2"/></svg> 학사일정 · 창의적 체험활동
+            <span id="planCount" style="font-size:12px;font-weight:600;margin-left:auto;color:var(--ink-faint)"></span></h3>
+          <div class="desc">휴업일은 그날 수업을 <b>수업 없음</b>으로 바꾸고, 창체 활동은 창체·동아리·봉사·진로 교시에 <b>활동명으로 자동 표시</b>됩니다. 요일변경수업을 지정하면 그날 다른 요일 시간표로 운영됩니다.</div>
+          <div class="row">
+            <div class="field"><label>학기 시작</label><input type="date" id="semFrom" onchange="setSem()"></div>
+            <div class="field"><label>학기 종료</label><input type="date" id="semTo" onchange="setSem()"></div>
+            <div class="field"><label>월 선택</label><select id="planMonth" onchange="renderPlanList()"></select></div>
+          </div>
+          <div class="toolbar" style="margin-bottom:6px">
+            <div class="chips" id="planTypeFilter"></div>
+            <div class="spacer"></div>
+            <button class="btn accent sm" onclick="openPlanModal()">+ 일정 추가</button>
+          </div>
+          <div id="planList"></div>
+          <div class="btnrow" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">
+            <button class="btn ghost sm" onclick="seedPlanAgain()">2026학년도 2학기 학사일정 다시 넣기</button>
+            <button class="btn danger sm" onclick="clearPlan()">학사일정 전부 삭제</button>
+          </div>
+          <p class="note" style="margin-top:10px">월별 수업일수(학사일정표 공식값)는 <b>통계</b> 화면에서 계산값과 나란히 볼 수 있습니다.</p>
+        </div>
+
+        <div class="admin-card card wide">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg> 시간표 편집</h3>
           <div class="desc">요일을 고르고 칸을 고쳐 쓰세요. 오른쪽 동그라미를 누르면 <b>내 수업</b>으로 표시됩니다. 괄호 안 내용은 작은 글씨로 표시돼요. 예) 영어(원어민)</div>
           <div class="daypick" id="editDayPick" style="margin-bottom:12px"></div>
@@ -750,7 +906,7 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
               <label>내보낼 범위</label>
               <select id="exportScope" onchange="refreshJsonBox()">
                 <option value="full">전체 — 시간표 + 할일·일정</option>
-                <option value="timetable">시간표만 — 수업 기록·교시 할일 포함</option>
+                <option value="timetable">시간표만 — 학사일정·수업 기록·교시 할일 포함</option>
                 <option value="work">할일·일정만 — 업무 할일·일정·반복 템플릿</option>
               </select>
             </div>
@@ -875,6 +1031,39 @@ textarea.code{font-family:var(--mono);font-size:11.5px;background:var(--paper);b
   </div>
 </div>
 
+
+<!-- Plan modal -->
+<div class="overlay" id="planOverlay">
+  <div class="modal">
+    <h3 id="planModalTitle">학사일정 추가</h3>
+    <input type="hidden" id="planId">
+    <div class="field"><label>종류</label>
+      <select id="planType" onchange="planTypeChange()">
+        <option value="event">행사</option>
+        <option value="holiday">휴업일 · 공휴일 (수업 없음)</option>
+        <option value="exam">고사</option>
+        <option value="creative">창의적 체험활동</option>
+      </select></div>
+    <div class="field"><label>내용</label><input id="planTitle" placeholder="예) 백합페스티벌"></div>
+    <div class="row">
+      <div class="field"><label>시작 날짜</label><input type="date" id="planFrom"></div>
+      <div class="field"><label>종료 날짜 <span style="color:var(--ink-faint);font-weight:400">(하루면 비워 두기)</span></label><input type="date" id="planTo"></div>
+    </div>
+    <div class="field"><label>대상 학년 <span style="color:var(--ink-faint);font-weight:400">(모두 끄면 전 학년)</span></label>
+      <div class="swatch-row" id="planGrades"></div></div>
+    <div class="field"><label>요일변경수업 <span style="color:var(--ink-faint);font-weight:400">(그날 다른 요일 시간표로 운영)</span></label>
+      <select id="planUseDay"></select></div>
+    <div class="field hidden" id="planAreaWrap"><label>창체 영역별 차시</label>
+      <div id="planAreas"></div></div>
+    <div class="field"><label>비고</label><input id="planNote" placeholder="예) 금요일 시간표 운영"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('planOverlay')">취소</button>
+      <button class="btn accent" onclick="savePlan()">저장</button>
+    </div>
+    <button class="btn danger sm full" id="planDelBtn" style="margin-top:8px;display:none" onclick="delPlan()">삭제</button>
+  </div>
+</div>
+
 <!-- Day detail modal -->
 <div class="overlay" id="dayOverlay">
   <div class="modal">
@@ -903,6 +1092,15 @@ var KEY="school_wf_v1", OLD_TT="tt-2026-2", OLD_TM="tm_data_v1";
 var PRIO={q1:{n:"긴급·중요",c:"var(--q1)"},q2:{n:"중요·여유",c:"var(--q2)"},q3:{n:"긴급·사소",c:"var(--q3)"},q4:{n:"나중에",c:"var(--q4)"}};
 var PRIO_HEX={q1:"#b8473b",q2:"#3f7d56",q3:"#c79a2e",q4:"#8b857c"};
 var ACCENTS=["#c4622d","#3f7d56","#11655a","#3a6ea5","#7a5a8e","#b8473b","#1f1d1a"];
+var WARNS=["#b8473b","#c62828","#d4601f","#b8860b","#7a5a8e","#1f1d1a"];
+var THEMES=[
+  {v:"light",n:"라이트",d:"따뜻한 종이",pa:"#f6f2ea",pi:"#1f1d1a",pc:"#c4622d",meta:"#f6f2ea"},
+  {v:"dark",n:"다크",d:"따뜻한 야간",pa:"#16140f",pi:"#ece7df",pc:"#e07d44",meta:"#16140f"},
+  {v:"mono",n:"모노",d:"흰 바탕 · 흑백",pa:"#ffffff",pi:"#0a0a0a",pc:"#0a0a0a",meta:"#ffffff"},
+  {v:"mono-dark",n:"모노 다크",d:"검정 바탕 · 흑백",pa:"#000000",pi:"#f5f5f5",pc:"#f5f5f5",meta:"#000000"}
+];
+function isMono(t){ return String(t||"").indexOf("mono")===0; }
+function themeDef(v){ for(var i=0;i<THEMES.length;i++) if(THEMES[i].v===v)return THEMES[i]; return THEMES[0]; }
 var DOW=["일","월","화","수","목","금","토"];
 var DAYS=["월","화","수","목","금"];
 var ACTIVITY=["창체","동아리","스포츠클럽","방과후학교 예술활동"];
@@ -927,6 +1125,252 @@ var RAW={
 var D, selDate, calCur=new Date(), selPrio="q2", tplSelPrio="q2";
 var gradeFilter=-1, editDay=0, sheet=null;
 
+
+/* =========================================================
+   학사일정 · 창의적 체험활동 (2026학년도 2학기)
+   type: holiday(휴업일) / exam(고사) / event(행사) / creative(창체)
+   [type, from, to(없으면 from), title, {grades, note, useDay, areas}]
+   grades : 0=1학년 1=2학년 2=3학년, null이면 전 학년
+   useDay : 요일변경수업 (0=월 … 4=금) — 그날 다른 요일 시간표로 운영
+   areas  : 창체 영역별 학년 차시 {자율:[1학년,2학년,3학년], 동아리:[], 봉사:[], 진로:[]}
+   ========================================================= */
+var SEED_TITLE="2026학년도 2학기";
+var SEED_RANGE={from:"2026-08-18",to:"2027-01-05"};
+var SEED_OFFICIAL={"2026-08":11,"2026-09":20,"2026-10":20,"2026-11":19,"2026-12":22,"2027-01":1};
+var SEED_PLAN=[
+/* ── 휴업일 · 공휴일 ───────────────────────── */
+["holiday","2026-08-01","2026-08-16","여름방학"],
+["holiday","2026-08-17","","대체공휴일(광복절)"],
+["holiday","2026-09-24","2026-09-27","추석연휴"],
+["holiday","2026-10-03","","개천절"],
+["holiday","2026-10-05","","대체공휴일(개천절)"],
+["holiday","2026-10-09","","한글날"],
+["holiday","2026-12-25","","성탄절"],
+["holiday","2027-01-01","","신정"],
+["holiday","2027-01-06","2027-02-28","겨울방학"],
+/* ── 고사 ──────────────────────────────────── */
+["exam","2026-09-01","2026-09-03","2학기 영어듣기평가",{grades:[0,1,2]}],
+["exam","2026-11-16","2026-11-18","2학기 1회고사",{grades:[0,1,2]}],
+/* ── 행사 (8월) ────────────────────────────── */
+["event","2026-08-18","","개학식",{useDay:4,note:"금요일 시간표로 운영"}],
+["event","2026-08-18","2026-08-21","학교폭력예방주간(함께어울림교육주간)"],
+["event","2026-08-19","","동아리"],
+["event","2026-08-21","","학교폭력예방교육(사이버폭력예방교육), 도박예방교육"],
+["event","2026-08-26","","동아리"],
+["event","2026-08-28","","독후감대회"],
+["event","2026-08-31","2026-09-04","양성평등주간"],
+/* ── 행사 (9월) ────────────────────────────── */
+["event","2026-09-02","","동아리"],
+["event","2026-09-04","","성폭력예방교육(교과연계), 채플"],
+["event","2026-09-07","2026-09-11","생명교육주간, 마음건강특별살핌주간"],
+["event","2026-09-07","2026-09-30","학부모상담주간"],
+["event","2026-09-09","","동아리"],
+["event","2026-09-10","","3회 학교설명회, 수업공개"],
+["event","2026-09-11","","생명존중교육"],
+["event","2026-09-16","2026-09-18","야영"],
+["event","2026-09-23","","동아리"],
+["event","2026-09-28","2026-10-02","언어문화개선교육주간, 인성교육주간"],
+["event","2026-09-30","","동아리"],
+/* ── 행사 (10월) ───────────────────────────── */
+["event","2026-10-02","","백일장대회, 시낭송회, 초청강연(교과연계)"],
+["event","2026-10-07","","동아리"],
+["event","2026-10-14","","동아리, 봉사활동"],
+["event","2026-10-16","","테마형 진로체험"],
+["event","2026-10-21","","동아리"],
+["event","2026-10-23","","진로상담, 감염병예방교육"],
+["event","2026-10-26","2026-10-30","숙박형국외체험학습"],
+/* ── 행사 (11월) ───────────────────────────── */
+["event","2026-11-02","","소방안전훈련(교과연계)"],
+["event","2026-11-04","","동아리"],
+["event","2026-11-06","","약물오남용교육"],
+["event","2026-11-06","2026-11-30","중3 수행평가 결과확인",{grades:[2]}],
+["event","2026-11-11","","동아리, 봉사활동(바른말고운말캠페인)"],
+["event","2026-11-13","","장애이해교육"],
+["event","2026-11-16","","장학컨설팅"],
+["event","2026-11-20","","추수감사절"],
+["event","2026-11-24","","의성예술한마당"],
+["event","2026-11-25","","동아리",{grades:[0,1]}],
+["event","2026-11-27","","지역사회 봉사활동(김장봉사)",{grades:[1]}],
+/* ── 행사 (12월) ───────────────────────────── */
+["event","2026-12-01","2026-12-04","중1·2 수행평가 결과확인",{grades:[0,1]}],
+["event","2026-12-02","","동아리"],
+["event","2026-12-04","","학급회의, 독서잔치"],
+["event","2026-12-09","","동아리",{grades:[0,1]}],
+["event","2026-12-11","","뮤지컬관람"],
+["event","2026-12-14","2026-12-31","꿈끼탐색주간"],
+["event","2026-12-16","","동아리"],
+["event","2026-12-17","","백합페스티벌"],
+["event","2026-12-18","","학생회장선거, 감염병예방교육"],
+["event","2026-12-23","","성탄축하제"],
+["event","2026-12-28","2026-12-29","스키캠프"],
+/* ── 행사 (1월) ────────────────────────────── */
+["event","2027-01-05","","종업식",{grades:[0,1]}],
+["event","2027-01-05","","졸업식",{grades:[2]}],
+/* ── 창의적 체험활동 ───────────────────────── */
+["creative","2026-08-19","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-08-21","","학교폭력예방교육(사이버예방교육)",{areas:{"자율":[0,0,1]}}],
+["creative","2026-08-21","","도박예방교육",{areas:{"자율":[0,0,1]}}],
+["creative","2026-08-26","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-08-28","","독후감대회",{areas:{"자율":[0,0,1]}}],
+["creative","2026-09-02","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-09-04","","성폭력예방교육(교과연계)",{areas:{}}],
+["creative","2026-09-04","","채플",{areas:{}}],
+["creative","2026-09-09","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-09-11","","생명존중교육",{areas:{"자율":[0,0,2]}}],
+["creative","2026-09-16","2026-09-18","야영",{areas:{"자율":[2,2,2],"동아리":[1,1,0],"봉사":[0,0,1],"진로":[2,2,2]},note:"1,2학년 동아리1, 봉사1, 진로2, 자율2"}],
+["creative","2026-09-23","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-09-30","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-10-02","","백일장대회",{areas:{"자율":[0,0,2]}}],
+["creative","2026-10-07","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-10-14","","동아리-봉사활동(국보77호 주변)",{areas:{"동아리":[1,1,0],"봉사":[0,0,1]},note:"1,2학년 동아리1, 봉사1"}],
+["creative","2026-10-16","","테마형 체험학습",{areas:{"진로":[2,2,2]}}],
+["creative","2026-10-21","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-10-23","","진로상담",{areas:{"진로":[0,0,1]}}],
+["creative","2026-10-26","2026-10-30","숙박형국외체험학습",{areas:{"진로":[4,4,6]}}],
+["creative","2026-11-04","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-11-06","","약물오남용교육",{areas:{"자율":[1,1,2]}}],
+["creative","2026-11-11","","바른말고운말캠페인(동아리-봉사)",{areas:{"동아리":[1,1,0],"봉사":[0,0,1]},note:"1,2학년 동아리1, 봉사1"}],
+["creative","2026-11-13","","장애이해교육",{areas:{"자율":[0,0,2]}}],
+["creative","2026-11-25","","동아리",{areas:{"동아리":[1,1,0]}}],
+["creative","2026-11-27","","김장봉사",{areas:{"동아리":[2,2,0],"봉사":[0,0,2]}}],
+["creative","2026-12-02","","동아리",{areas:{"동아리":[1,1,1]}}],
+["creative","2026-12-04","","학급회의",{areas:{"자율":[0,0,1]}}],
+["creative","2026-12-09","","동아리",{areas:{"동아리":[1,1,0]},note:"1,2학년 동아리 종료"}],
+["creative","2026-12-11","","뮤지컬 관람",{areas:{"진로":[2,2,2]}}],
+["creative","2026-12-17","","백합페스티벌",{areas:{"자율":[2,2,2],"진로":[0,0,2]},note:"자율2, 진로2"}],
+["creative","2026-12-18","","학생회장선거",{areas:{"자율":[0,0,1]}}],
+["creative","2026-12-28","2026-12-29","스키캠프",{areas:{"자율":[2,2,2],"진로":[0,0,2]},note:"자율2, 진로2"}]
+];
+var PLAN_TYPE={
+  holiday:{n:"휴업일",c:"var(--red)",bg:"var(--red-soft)"},
+  exam:{n:"고사",c:"var(--grape)",bg:"var(--grape-soft)"},
+  event:{n:"행사",c:"var(--ink)",bg:"var(--line)"},
+  creative:{n:"창체",c:"var(--blue)",bg:"var(--blue-soft)"}
+};
+/* 시간표 과목명 → 창체 영역 */
+var SUBJ_AREA={"창체":["자율","봉사","진로"],"동아리":["동아리"],"진로":["진로"],"봉사":["봉사"],"자율":["자율"]};
+var AREA_LIST=["자율","동아리","봉사","진로"];
+
+function seedPlan(){
+  return SEED_PLAN.map(function(r){
+    var o=r[4]||{};
+    return {id:uid(),type:r[0],from:r[1],to:r[2]||r[1],title:r[3],
+      grades:o.grades||null,note:o.note||"",useDay:(o.useDay==null?null:o.useDay),areas:o.areas||null};
+  });
+}
+
+/* ---- 조회 도우미 ---- */
+function planOn(ds){
+  return (D.plan||[]).filter(function(p){ return p.from<=ds&&(p.to||p.from)>=ds; });
+}
+function holidayOn(ds){
+  var h=planOn(ds).filter(function(p){ return p.type==="holiday"; });
+  return h.length?h[0]:null;
+}
+function overrideOn(ds){
+  var p=planOn(ds).filter(function(x){ return x.useDay!=null&&x.useDay>=0; });
+  return p.length?p[0]:null;
+}
+/* 그날 실제로 쓰는 시간표의 요일 index (요일변경수업 반영) */
+function effDayIdx(ds){
+  var o=overrideOn(ds);
+  if(o)return o.useDay;
+  return dayIdxOf(ds);
+}
+function isSchoolDay(ds){
+  if(holidayOn(ds))return false;
+  return effDayIdx(ds)>=0;
+}
+function gradeText(g){
+  if(!g||!g.length||g.length>=D.grades.length)return "";
+  return g.map(function(i){ return (D.grades[i]||"").replace("학년","")+"학년"; }).join("·");
+}
+function areaText(p){
+  if(!p.areas)return "";
+  var out=[];
+  AREA_LIST.forEach(function(a){
+    var arr=p.areas[a]; if(!arr)return;
+    var gs=[],vals=[];
+    for(var g=0;g<D.grades.length;g++) if(arr[g]>0){ gs.push(g); vals.push(arr[g]); }
+    if(!gs.length)return;
+    var same=vals.every(function(v){ return v===vals[0]; });
+    var nm=function(g){ return String(D.grades[g]||"").replace("학년",""); };
+    if(same){
+      var lbl=(gs.length===D.grades.length)?"전학년":(gs.map(nm).join("·")+"학년");
+      out.push(a+" "+lbl+" "+vals[0]+"차시");
+    }else{
+      out.push(a+" "+gs.map(function(g,i){ return nm(g)+"학년 "+vals[i]+"차시"; }).join(", "));
+    }
+  });
+  return out.join(" · ");
+}
+/* 그 날 그 교시(과목)·학년에 해당하는 창체 활동명 */
+function creativeLabel(ds,subjMain,g){
+  var areas=SUBJ_AREA[subjMain]; if(!areas)return "";
+  var out=[];
+  planOn(ds).forEach(function(p){
+    if(p.type!=="creative"||!p.areas)return;
+    for(var i=0;i<areas.length;i++){
+      var arr=p.areas[areas[i]];
+      if(arr&&arr[g]>0){ if(out.indexOf(p.title)<0)out.push(p.title); break; }
+    }
+  });
+  return out.join(" / ");
+}
+/* 학사일정표와 창체표에 같은 항목이 중복으로 실린 경우 창체 쪽을 숨긴다 */
+function normTitle(t){ return String(t||"").replace(/[^0-9A-Za-z가-힣]/g,""); }
+function dedupePlan(list){
+  var evs=list.filter(function(p){ return p.type!=="creative"; }).map(function(e){ return Object.assign({},e); });
+  var rest=[];
+  list.filter(function(p){ return p.type==="creative"; }).forEach(function(p){
+    var a=normTitle(p.title), host=null;
+    if(a.length>=2){
+      for(var i=0;i<evs.length;i++){
+        var b=normTitle(evs[i].title);
+        if(b.length>=2&&(b.indexOf(a)>=0||a.indexOf(b)>=0)){ host=evs[i]; break; }
+      }
+    }
+    if(host){
+      if(p.areas){
+        host.areas=host.areas||{};
+        Object.keys(p.areas).forEach(function(k){
+          if(!host.areas[k])host.areas[k]=p.areas[k];
+        });
+      }
+      if(p.note&&!host.note)host.note=p.note;
+    }else rest.push(p);
+  });
+  return evs.concat(rest).sort(function(x,y){
+    return x.from.localeCompare(y.from)||String(x.type).localeCompare(String(y.type));
+  });
+}
+/* 다음 고사까지 D-day */
+function nextExam(){
+  var t=todayStr(), best=null;
+  (D.plan||[]).forEach(function(p){
+    if(p.type!=="exam")return;
+    var end=p.to||p.from;
+    if(end<t)return;
+    if(!best||p.from<best.from)best=p;
+  });
+  if(!best)return null;
+  var d=Math.round((parseYmd(best.from)-parseYmd(t))/86400000);
+  return {p:best,d:d};
+}
+/* 월별 수업일수 (휴업일 제외한 평일 + 요일변경수업일) */
+function schoolDayCount(){
+  var from=(D.semFrom||SEED_RANGE.from), to=(D.semTo||SEED_RANGE.to);
+  var out={}, cur=from, guard=0;
+  while(cur<=to&&guard++<800){
+    if(isSchoolDay(cur)){
+      var m=cur.slice(0,7);
+      out[m]=(out[m]||0)+1;
+    }
+    cur=addDays(cur,1);
+  }
+  return out;
+}
+
 function defaults(){
   var d={
     v:1,
@@ -936,10 +1380,11 @@ function defaults(){
     periods:[{s:"09:00",e:"09:45"},{s:"09:55",e:"10:40"},{s:"10:50",e:"11:35"},{s:"11:45",e:"12:30"},
              {s:"13:20",e:"14:05"},{s:"14:15",e:"15:00"},{s:"15:10",e:"15:55"}],
     cells:{}, mine:{}, cellNotes:{}, dayRec:{},
+    plan:seedPlan(), semFrom:SEED_RANGE.from, semTo:SEED_RANGE.to, official:Object.assign({},SEED_OFFICIAL),
     tasks:[], events:[], gcal:[], templates:[],
     categories:[{name:"수업",color:"#c4622d"},{name:"업무",color:"#3a6ea5"},{name:"회의",color:"#7a5a8e"},
                 {name:"개인",color:"#3f7d56"},{name:"학습",color:"#c79a2e"}],
-    settings:{theme:"light",accent:"#c4622d",start:"08:40",end:"16:40",workdays:[1,2,3,4,5],tz:"Asia/Seoul",
+    settings:{theme:"light",accent:"#c4622d",accentMono:"",warn:"",start:"08:40",end:"16:40",workdays:[1,2,3,4,5],tz:"Asia/Seoul",
       lastGen:"",googleClientId:"",lastSync:"",reminderOn:false,reminderTime:"08:00",
       mineOnly:false,calShowCls:false}
   };
@@ -952,7 +1397,10 @@ function normalize(o){
   var def=defaults();
   o=Object.assign({},def,o||{});
   o.settings=Object.assign({},def.settings,o.settings||{});
-  ["cells","mine","cellNotes","dayRec"].forEach(function(k){ if(!o[k]||typeof o[k]!=="object")o[k]={}; });
+  ["cells","mine","cellNotes","dayRec","official"].forEach(function(k){ if(!o[k]||typeof o[k]!=="object")o[k]={}; });
+  if(!Array.isArray(o.plan))o.plan=[];
+  o.plan.forEach(function(p){ if(!p.id)p.id=uid(); if(!p.to)p.to=p.from; if(p.useDay===undefined)p.useDay=null; });
+  o.semFrom=o.semFrom||def.semFrom; o.semTo=o.semTo||def.semTo;
   ["tasks","events","gcal","templates","categories","days","grades","periods"].forEach(function(k){
     if(!Array.isArray(o[k])||!o[k].length) o[k]=def[k]; });
   o.tasks.forEach(function(t){ if(!t.tags)t.tags=[]; if(!t.priority)t.priority="q2"; });
@@ -964,7 +1412,13 @@ function normalize(o){
 function load(){
   var raw=null;
   try{ raw=localStorage.getItem(KEY); }catch(e){}
-  if(raw){ try{ return normalize(JSON.parse(raw)); }catch(e){} }
+  if(raw){
+    try{
+      var o=normalize(JSON.parse(raw));
+      if(!o.plan.length){ o.plan=seedPlan(); o.official=Object.assign({},SEED_OFFICIAL); o._seeded=1; }
+      return o;
+    }catch(e){}
+  }
   var merged=fromLegacy(defaults(),true);
   return merged;
 }
@@ -987,6 +1441,10 @@ function applyTimetable(src,target){
   if(src.grades&&src.grades.length)t.grades=src.grades.slice();
   if(src.periods&&src.periods.length)t.periods=src.periods.slice();
   t.cells=src.cells||{}; t.mine=src.mine||{}; t.cellNotes=src.cellNotes||{}; t.dayRec=src.dayRec||{};
+  if(src.plan)t.plan=src.plan.slice();
+  if(src.semFrom)t.semFrom=src.semFrom;
+  if(src.semTo)t.semTo=src.semTo;
+  if(src.official)t.official=Object.assign({},src.official);
   t.tasks=(t.tasks||[]).filter(function(x){ return !x.link; }).concat(src.classTasks||[]);
   ensureCoreCats(t);
 }
@@ -1039,6 +1497,7 @@ function readPayload(obj){
     return {kind:"full",
       tt:{title:obj.title,days:obj.days,grades:obj.grades,periods:obj.periods,
         cells:obj.cells,mine:obj.mine,cellNotes:obj.cellNotes,dayRec:obj.dayRec||{},
+        plan:obj.plan,semFrom:obj.semFrom,semTo:obj.semTo,official:obj.official,
         classTasks:(obj.tasks||[]).filter(function(t){ return !!t.link; })},
       work:{tasks:(obj.tasks||[]).filter(function(t){ return !t.link; }),
         events:obj.events,gcal:obj.gcal,templates:obj.templates,categories:obj.categories}};
@@ -1158,10 +1617,12 @@ function nowPeriod(){
 function segments(d,p,gs,date){
   var out=[];
   for(var i=0;i<gs.length;i++){
-    var t=resolve(date,d,p,gs[i]);
+    var raw=resolve(date,d,p,gs[i]);
+    var cl=date?creativeLabel(date,split(raw).main,gs[i]):"";
+    var t=cl||raw;
     var last=out[out.length-1];
     if(last&&last.t===t&&t!=="") last.gs.push(gs[i]);
-    else out.push({t:t,gs:[gs[i]]});
+    else out.push({t:t,gs:[gs[i]],orig:raw,plan:!!cl});
   }
   out.forEach(function(seg){
     seg.mine=seg.gs.some(function(g){ return isMine(d,p,g); });
@@ -1249,9 +1710,11 @@ function jumpToday(){ selDate=todayStr(); renderToday(); }
 
 function renderToday(){
   generateRepeats();
-  var di=dayIdxOf(selDate), np=nowPeriod();
+  var di=effDayIdx(selDate), np=nowPeriod();
+  var ov0=overrideOn(selDate);
   document.getElementById("dateLabel").innerHTML="<b>"+esc(fmtDate(selDate))+"</b><span>"+
-    esc(wdName(selDate))+"요일"+(isToday(selDate)?" · 오늘":"")+"</span>";
+    esc(wdName(selDate))+"요일"+(isToday(selDate)?" · 오늘":"")+"</span>"+
+    (ov0?'<span class="swapday">'+esc(D.days[ov0.useDay]||"")+"요일 시간표</span>":"");
   document.getElementById("mineOnlyBtn").setAttribute("aria-pressed",String(!!D.settings.mineOnly));
 
   document.getElementById("dayPick").innerHTML=D.days.map(function(dn,i){
@@ -1265,15 +1728,23 @@ function renderToday(){
   var rec=D.dayRec[selDate], lbl=document.getElementById("dayLabelInput");
   if(document.activeElement!==lbl) lbl.value=rec&&rec.label?rec.label:"";
 
+  /* 학사일정 배지 */
+  var hol=holidayOn(selDate), ovr=overrideOn(selDate);
+  document.getElementById("planStrip").innerHTML=planStripHTML(selDate);
+
   var msg="";
-  if(di<0) msg="주말입니다. 이 날은 수업이 없어요.";
+  if(hol) msg="";
+  else if(di<0) msg="주말입니다. 이 날은 수업이 없어요.";
   else if(isToday(selDate)&&np.period<0) msg="지금은 수업 시간이 아닙니다.";
   var note=document.getElementById("todayNote");
   note.textContent=msg; note.style.display=msg?"":"none";
 
   /* 교시별 수업 */
   var out=[], clsCount=0, mineCount=0;
-  if(di<0){
+  if(hol){
+    out.push('<div class="holiday-card card"><div class="hd">'+esc(hol.title)+"</div>"+
+      '<div class="hs">휴업일 · 이 날은 수업이 없습니다</div></div>');
+  }else if(di<0){
     out.push('<div class="empty card">주말이에요 🌿</div>');
   }else{
     var gs=allGrades(), L=dayLayout(di,gs,selDate);
@@ -1324,7 +1795,7 @@ function renderToday(){
   document.getElementById("sideDate").textContent=fmtKDate(todayStr());
   document.getElementById("sideDone").textContent=D.tasks.filter(function(t){return t.date===todayStr()&&t.done;}).length;
   document.getElementById("sideTotal").textContent=D.tasks.filter(function(t){return t.date===todayStr();}).length;
-  document.getElementById("sideCls").textContent=myPeriodsOn(dayIdxOf(todayStr()),todayStr()).length;
+  document.getElementById("sideCls").textContent=myPeriodsOn(effDayIdx(todayStr()),todayStr()).length;
   var nowTxt="";
   if(np.period>=0){
     nowTxt=(np.period+1)+"교시 진행 중";
@@ -1335,16 +1806,40 @@ function renderToday(){
       }
     }
   }
+  var exN=nextExam();
+  if(!nowTxt&&exN&&exN.d>=0&&exN.d<=60) nowTxt=exN.p.title+" D"+(exN.d===0?"-DAY":"-"+exN.d);
   document.getElementById("sideNow").textContent=nowTxt;
   document.getElementById("brandSub").textContent=D.title;
 }
+function planStripHTML(ds){
+  var items=dedupePlan(planOn(ds)).filter(function(p){ return p.type!=="holiday"; });
+  var hol=holidayOn(ds);
+  var h="";
+  if(hol)h+='<span class="pchip holiday">휴업일 · '+esc(hol.title)+"</span>";
+  var ex=nextExam();
+  if(ex&&ex.d>=0&&ex.d<=30&&(!hol))
+    h+='<span class="pchip exam">'+esc(ex.p.title)+" D"+(ex.d===0?"-DAY":"-"+ex.d)+"</span>";
+  items.forEach(function(p){
+    var g=gradeText(p.grades);
+    var span=(p.to&&p.to>p.from)?(" "+fmtShort(p.from)+"~"+fmtShort(p.to)):"";
+    h+='<span class="pchip '+p.type+'" title="'+esc(p.note||"")+'">'+
+      esc(p.title)+(g?' <i>'+esc(g)+"</i>":"")+(span?' <i>'+esc(span)+"</i>":"")+"</span>";
+  });
+  return h?('<div class="pchips">'+h+"</div>"):"";
+}
 function pickDay(i){ selDate=dateFor(i); renderToday(); }
 function classCardHTML(seg,p){
-  var cls="ccard"+(seg.gs.length>1?" wide":"")+(seg.mine?" mine":"")+(seg.swapped?" swapped":"");
+  var cls="ccard"+(seg.gs.length>1?" wide":"")+(seg.mine?" mine":"")+(seg.swapped?" swapped":"")+(seg.plan?" planned":"");
   var sp=split(seg.t);
   var h='<span class="glabel">'+esc(gradeLabel(seg.gs))+(seg.hasNote?'<i class="dotm"></i>':"")+"</span>";
   h+='<span class="subj">'+(seg.t?esc(sp.main):"—")+"</span>";
   if(sp.sub) h+='<span class="sub">'+esc(sp.sub)+"</span>";
+  if(seg.plan){
+    var ar=creativeAreaText(selDate,seg.t,seg.gs);
+    var og=split(seg.orig||"").main;
+    var sub=ar?((og&&ar.indexOf(og)<0)?og+" · "+ar:ar):og;
+    if(sub) h+='<span class="sub plan">'+esc(sub)+"</span>";
+  }
   if(seg.fixed) h+='<span class="fixed">'+esc(seg.fixed)+"</span>";
   if(seg.memo) h+='<span class="memo">'+esc(seg.memo)+"</span>";
   if(seg.todos.length){
@@ -1354,6 +1849,18 @@ function classCardHTML(seg,p){
   var hintable=seg.mine||!Object.keys(D.mine).length;
   if(!seg.hasNote&&hintable) h+='<span class="add">＋ 기록·할일</span>';
   return '<button type="button" class="'+cls+'" onclick="openSheet(\''+selDate+"',"+p+","+seg.gs[0]+')">'+h+"</button>";
+}
+function creativeAreaText(ds,title,gs){
+  var out=[];
+  planOn(ds).forEach(function(pp){
+    if(pp.type!=="creative"||pp.title!==title||!pp.areas)return;
+    AREA_LIST.forEach(function(a){
+      var arr=pp.areas[a]; if(!arr)return;
+      var v=0; gs.forEach(function(g){ if(arr[g]>v)v=arr[g]; });
+      if(v>0)out.push(a+" "+v+"차시");
+    });
+  });
+  return out.join(" · ");
 }
 function weekDoneCount(){
   var now=new Date(), day=(now.getDay()+6)%7, mon=new Date(now);
@@ -1365,10 +1872,23 @@ function emptyHTML(msg){
 }
 
 /* ============ 할 일 ============ */
-function catColor(name){ var c=D.categories.find(function(c){ return c.name===name; }); return c?c.color:"var(--ink-faint)"; }
+/* 모노 테마에서는 사용자가 정한 분류 색을 회색조로 변환해 보여준다 */
+function monoize(hex){
+  var m=/^#?([0-9a-fA-F]{6})$/.exec(String(hex||"").trim());
+  if(!m)return hex;
+  var n=parseInt(m[1],16), r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+  var y=0.299*r+0.587*g+0.114*b;
+  var dark=D.settings.theme==="mono-dark";
+  var lo=dark?110:50, hi=dark?236:170;
+  var v=Math.round(lo+(y/255)*(hi-lo));
+  var h=function(x){ return ("0"+x.toString(16)).slice(-2); };
+  return "#"+h(v)+h(v)+h(v);
+}
+function tcolor(hex){ return isMono(D.settings.theme)?monoize(hex):hex; }
+function catColor(name){ var c=D.categories.find(function(c){ return c.name===name; }); return c?tcolor(c.color):"var(--ink-faint)"; }
 function linkLabel(t){
   if(!t.link)return "";
-  var di=dayIdxOf(t.date);
+  var di=effDayIdx(t.date);
   var subj=di>=0?split(resolve(t.date,di,t.link.p,t.link.g)).main:"";
   return (t.link.p+1)+"교시 "+(D.grades[t.link.g]||"")+(subj?" "+subj:"");
 }
@@ -1421,7 +1941,7 @@ function refreshAll(){
 function fillLinkSelect(sel){
   var s=document.getElementById("taskLink");
   var date=document.getElementById("taskDate").value||selDate;
-  var di=dayIdxOf(date);
+  var di=effDayIdx(date);
   var h='<option value="">연결 없음 (일반 업무)</option>';
   if(di>=0){
     for(var p=0;p<D.periods.length;p++)
@@ -1526,11 +2046,13 @@ function renderWeek(){
   document.getElementById("weekNote").textContent="메모 표시 기준: "+fmtShort(dateFor(0))+"~"+fmtShort(dateFor(4));
 
   var gs=activeGrades(), np=nowPeriod();
-  var layouts=D.days.map(function(_,d){ return dayLayout(d,gs,null); });
+  var layouts=D.days.map(function(_,d){ return dayLayout(d,gs,dateFor(d)); });
 
   var h='<table class="grid"><thead><tr><th class="pcol" rowspan="2">교시</th>';
   D.days.forEach(function(d,i){
-    h+='<th colspan="'+gs.length+'" class="'+(i<D.days.length-1?"dayend":"")+'">'+esc(d)+"</th>";
+    var wd=dateFor(i), hl=holidayOn(wd), ov=overrideOn(wd);
+    h+='<th colspan="'+gs.length+'" class="'+(i<D.days.length-1?"dayend":"")+(hl?" holicol":"")+'">'+esc(d)+
+      '<span class="dsub">'+esc(fmtShort(wd))+(hl?" · 휴업":(ov?" · "+esc(D.days[ov.useDay]||"")+"요일":""))+"</span></th>";
   });
   h+="</tr><tr>";
   D.days.forEach(function(_,i){
@@ -1561,6 +2083,7 @@ function weekRowCells(p,layouts,gs,np){
       var cls=[];
       if(seg.mine)cls.push("mine"); else if(D.settings.mineOnly)cls.push("dim");
       if(isActivity(seg.t))cls.push("activity");
+      if(holidayOn(wdate))cls.push("holiday");
       if(np.day===d&&np.period>=p&&np.period<=p+rowspan-1)cls.push("nowcell");
       if(si===segs.length-1&&d<D.days.length-1)cls.push("dayend");
       var sp=split(seg.t);
@@ -1601,7 +2124,7 @@ function closeSheet(){
 }
 function renderSheet(){
   if(!sheet)return;
-  var date=sheet.date,p=sheet.p,g=sheet.g,di=dayIdxOf(date);
+  var date=sheet.date,p=sheet.p,g=sheet.g,di=effDayIdx(date);
   var orig=di>=0?base(di,p,g):"";
   var cur=di>=0?resolve(date,di,p,g):"";
   var sw=swapOf(date,p,g);
@@ -1642,7 +2165,7 @@ function renderSheet(){
 }
 function sheetMemo(v){ setNoteText(sheet.date,sheet.p,sheet.g,v); save(); }
 function sheetFixed(v){
-  var k=key(dayIdxOf(sheet.date),sheet.p,sheet.g);
+  var k=key(effDayIdx(sheet.date),sheet.p,sheet.g);
   if((v||"").trim()) D.cellNotes[k]=v; else delete D.cellNotes[k];
   save();
 }
@@ -1686,11 +2209,16 @@ var CAL_MAX_LANES=4;
 function evEnd(e){ return e.endDate&&e.endDate>e.date?e.endDate:e.date; }
 function moveMonth(n){ calCur.setDate(1); calCur.setMonth(calCur.getMonth()+n); renderCal(); }
 function calToday(){ calCur=new Date(); renderCal(); }
+function toggleCalPlan(){
+  D.settings.calShowPlan=(D.settings.calShowPlan===false);
+  save(); renderCal();
+}
 function toggleCalCls(){
   D.settings.calShowCls=!D.settings.calShowCls; save(); renderCal();
 }
 function renderCal(){
   document.getElementById("calClsBtn").setAttribute("aria-pressed",String(!!D.settings.calShowCls));
+  document.getElementById("calPlanBtn").setAttribute("aria-pressed",String(D.settings.calShowPlan!==false));
   document.getElementById("calDow").innerHTML=DOW.map(function(d,i){
     return '<div class="cal-dow" style="color:'+(i===0?"var(--red)":i===6?"var(--blue)":"")+'">'+d+"</div>"; }).join("");
   var y=calCur.getFullYear(), m=calCur.getMonth();
@@ -1702,6 +2230,17 @@ function renderCal(){
   var gi=function(ds){ return Math.round((new Date(ds+"T00:00")-gridStart)/86400000); };
 
   var segs=[];
+  if(D.settings.calShowPlan!==false){
+    dedupePlan(D.plan||[]).forEach(function(p){
+      if(p.type==="holiday"){
+        segs.push({startDs:p.from,endDs:p.to||p.from,title:p.title,cls:"holi",time:""});
+        return;
+      }
+      var g=gradeText(p.grades);
+      segs.push({startDs:p.from,endDs:p.to||p.from,
+        title:p.title+(g?" ("+g+")":""),cls:"pl-"+p.type,time:""});
+    });
+  }
   Object.keys(D.dayRec).forEach(function(dt){
     var r=D.dayRec[dt];
     if(r&&r.label) segs.push({startDs:dt,endDs:dt,title:r.label,cls:"school",time:""});
@@ -1714,7 +2253,7 @@ function renderCal(){
   if(D.settings.calShowCls){
     for(var w0=0;w0<6;w0++)for(var c0=0;c0<7;c0++){
       var dd=new Date(start); dd.setDate(start.getDate()+w0*7+c0);
-      var ds0=ymd(dd), di0=dayIdxOf(ds0);
+      var ds0=ymd(dd), di0=effDayIdx(ds0);
       if(di0<0)continue;
       var mps=myPeriodsOn(di0,ds0);
       if(!mps.length)continue;
@@ -1729,7 +2268,8 @@ function renderCal(){
     var lo=w*7, hi=lo+6;
     var wsegs=segs.filter(function(sg){ return sg.e>=lo&&sg.s<=hi; })
       .sort(function(a,b){
-        var pr={school:0,"":1,gcal:2,task:3,cls:4};
+        var pr={holi:0,"pl-exam":1,school:2,"pl-event":3,"":4,gcal:5,"pl-creative":6,task:7,cls:8};
+        if(pr[a.cls]===undefined)pr[a.cls]=9; if(pr[b.cls]===undefined)pr[b.cls]=9;
         return (pr[a.cls]-pr[b.cls])||(b.span-a.span)||(a.s-b.s)||((a.time||"~").localeCompare(b.time||"~")); });
     var lanes=[], overflow=[0,0,0,0,0,0,0];
     wsegs.forEach(function(sg){
@@ -1746,10 +2286,11 @@ function renderCal(){
     for(var c2=0;c2<7;c2++){
       var d2=new Date(start); d2.setDate(start.getDate()+lo+c2);
       var ds=ymd(d2), out=d2.getMonth()!==m, isT=ds===tStr, wd=d2.getDay();
+      var hol2=holidayOn(ds);
       var hasItem=wsegs.some(function(sg){ return sg._cs<=c2&&sg._ce>=c2&&sg.cls!=="cls"; });
-      cells+='<div class="cal-bg '+(out?"out":"")+" "+(isT?"today":"")+'" style="grid-column:'+(c2+1)+
+      cells+='<div class="cal-bg '+(out?"out":"")+" "+(isT?"today":"")+(hol2?" holiday":"")+'" style="grid-column:'+(c2+1)+
         '" onclick="openDay(\''+ds+'\')"></div>'+
-        '<div class="cal-dnum '+(out?"out":"")+" "+(isT?"todaynum":wd===0?"sun":wd===6?"sat":"")+
+        '<div class="cal-dnum '+(out?"out":"")+" "+(isT?"todaynum":(hol2?"holi":wd===0?"sun":wd===6?"sat":""))+
         '" style="grid-column:'+(c2+1)+'">'+d2.getDate()+"</div>"+
         (hasItem?'<div class="cal-dot" style="grid-column:'+(c2+1)+'"></div>':"");
     }
@@ -1776,10 +2317,25 @@ function openDay(ds){
   var evs=D.events.filter(covers).sort(function(a,b){ return (a.time||"").localeCompare(b.time||""); });
   var gcs=(D.gcal||[]).filter(covers).sort(function(a,b){ return (a.time||"").localeCompare(b.time||""); });
   var tks=D.tasks.filter(function(t){ return t.date===ds&&(t.title||"").trim(); });
-  var di=dayIdxOf(ds);
+  var di=effDayIdx(ds);
   var h="";
+  var pls=dedupePlan(planOn(ds));
+  if(pls.length){
+    h+='<div class="section-title" style="margin-top:0">학사일정 <span class="count">'+pls.length+"</span></div>";
+    h+=pls.map(function(pp){
+      var T=PLAN_TYPE[pp.type]||PLAN_TYPE.event;
+      var g=gradeText(pp.grades);
+      var span=(pp.to&&pp.to>pp.from)?(fmtShort(pp.from)+"~"+fmtShort(pp.to)):"";
+      var ar=areaText(pp);
+      var bits=[span,g,ar,pp.note].filter(Boolean).join(" · ");
+      return '<div class="planrow"><span class="pt" style="background:'+T.bg+";color:"+T.c+'">'+T.n+"</span>"+
+        '<span class="pb"><b>'+esc(pp.title)+"</b>"+(bits?"<span>"+esc(bits)+"</span>":"")+
+        (pp.useDay!=null&&pp.useDay>=0?'<span style="color:var(--accent);font-weight:600">'+esc(D.days[pp.useDay]||"")+"요일 시간표로 운영</span>":"")+
+        "</span></div>";
+    }).join("");
+  }
   if(rec&&rec.label) h+='<div class="list-item" style="border-color:var(--ink)"><div class="dot" style="background:var(--ink)"></div>'+
-    '<div class="nm">'+esc(rec.label)+'<div class="tiny">학교일정</div></div></div>';
+    '<div class="nm">'+esc(rec.label)+'<div class="tiny">직접 적은 학교일정</div></div></div>';
 
   h+='<div class="section-title" style="margin-top:12px">일정 <span class="count">'+evs.length+"</span></div>";
   var mdLabel=function(e){
@@ -1804,7 +2360,7 @@ function openDay(ds){
     }).join("");
   }
 
-  if(di>=0){
+  if(di>=0&&!holidayOn(ds)){
     var mps=myPeriodsOn(di,ds);
     h+='<div class="section-title">내 수업 <span class="count">'+mps.length+"</span></div>";
     h+=mps.length?mps.map(function(x){
@@ -1898,7 +2454,7 @@ function collectLogs(){
   var out=[];
   Object.keys(D.dayRec).forEach(function(date){
     var rec=D.dayRec[date]; if(!rec)return;
-    var di=dayIdxOf(date);
+    var di=effDayIdx(date);
     Object.keys(rec.notes||{}).forEach(function(k){
       var n=rec.notes[k]; if(!n||!(n.t||"").trim())return;
       var a=k.split("-"), p=+a[0], g=+a[1];
@@ -1912,7 +2468,7 @@ function collectLogs(){
     if(!t.link||!(t.title||"").trim())return;
     var exists=out.some(function(o){ return o.date===t.date&&o.p===t.link.p&&o.g===t.link.g; });
     if(exists)return;
-    var di=dayIdxOf(t.date);
+    var di=effDayIdx(t.date);
     out.push({date:t.date,p:t.link.p,g:t.link.g,text:"",label:(D.dayRec[t.date]||{}).label||"",
       todos:classTasks(t.date,t.link.p,[t.link.g]),
       subject:di>=0?resolve(t.date,di,t.link.p,t.link.g):""});
@@ -2008,13 +2564,13 @@ function renderStats(){
 
   var cnt={q1:0,q2:0,q3:0,q4:0};
   D.tasks.forEach(function(t){ if(cnt[t.priority]!=null)cnt[t.priority]++; });
-  var pitems=Object.keys(PRIO).map(function(k){ return {label:PRIO[k].n,value:cnt[k],color:PRIO_HEX[k]}; });
+  var pitems=Object.keys(PRIO).map(function(k){ return {label:PRIO[k].n,value:cnt[k],color:(cssv("--"+k)||PRIO_HEX[k])}; });
   chDonut("chPrio",pitems);
   document.getElementById("lgPrio").innerHTML=pitems.map(function(it){
     return '<span><i style="background:'+it.color+'"></i>'+esc(it.label)+" "+it.value+"</span>"; }).join("");
 
   chHBar("chCat",D.categories.map(function(c){
-    return {label:c.name,value:D.tasks.filter(function(t){ return t.category===c.name; }).length,color:c.color}; }));
+    return {label:c.name,value:D.tasks.filter(function(t){ return t.category===c.name; }).length,color:tcolor(c.color)}; }));
 
   var scount={};
   logs.forEach(function(o){ var n=split(o.subject).main||"(수업 없음)"; scount[n]=(scount[n]||0)+1; });
@@ -2028,9 +2584,36 @@ function renderStats(){
     return n;
   });
   var gLog=D.grades.map(function(_,g){ return logs.filter(function(o){ return o.g===g; }).length; });
+  renderDayCount();
   chGrouped("chGrade",D.grades.slice(),[
     {color:cssv("--accent"),data:gLoad},
     {color:cssv("--blue"),data:gLog}]);
+}
+function renderDayCount(){
+  var el=document.getElementById("dayCount"); if(!el)return;
+  var calc=schoolDayCount();
+  var months=Object.keys(calc);
+  Object.keys(D.official||{}).forEach(function(m){ if(months.indexOf(m)<0)months.push(m); });
+  months.sort();
+  if(!months.length){ el.innerHTML='<tbody><tr><td class="note">학사일정이 없습니다.</td></tr></tbody>'; return; }
+  var tc=0,to=0;
+  var cCells=months.map(function(m){ var v=calc[m]||0; tc+=v; return "<td>"+v+"</td>"; }).join("");
+  var oCells=months.map(function(m){
+    var v=(D.official||{})[m];
+    if(v==null)return '<td class="note">–</td>';
+    to+=v; return "<td>"+v+"</td>"; }).join("");
+  var dCells=months.map(function(m){
+    var o=(D.official||{})[m];
+    if(o==null)return '<td class="note">–</td>';
+    var d=(calc[m]||0)-o;
+    return '<td class="'+(d?"diff":"")+'">'+(d>0?"+":"")+d+"</td>"; }).join("");
+  el.innerHTML="<thead><tr><th>구분</th>"+
+    months.map(function(m){ return "<th>"+(+m.slice(5,7))+"월</th>"; }).join("")+
+    "<th>합계</th></tr></thead><tbody>"+
+    "<tr><td>계산값</td>"+cCells+"<td>"+tc+"</td></tr>"+
+    "<tr><td>학사일정표</td>"+oCells+"<td>"+to+"</td></tr>"+
+    "<tr><td>차이</td>"+dCells+"<td>"+((tc-to)>0?"+":"")+(tc-to)+"</td></tr>"+
+    "</tbody>";
 }
 function calcStreak(){
   var s=0;
@@ -2148,13 +2731,27 @@ function clip(s,n){ s=String(s); return s.length>n?s.slice(0,n-1)+"…":s; }
 
 /* ============ 관리 ============ */
 function renderAdmin(){
-  document.getElementById("themeToggle").classList.toggle("on",D.settings.theme==="dark");
+  var th=D.settings.theme||"light";
+  document.getElementById("themePick").innerHTML=THEMES.map(function(t){
+    return '<button type="button" class="theme-opt '+(th===t.v?"on":"")+'" onclick="setTheme(\''+t.v+'\')">'+
+      '<span class="tp" style="--pa:'+t.pa+";--pi:"+t.pi+";--pc:"+t.pc+'"></span>'+
+      '<span class="tx"><b>'+t.n+"</b><small>"+t.d+"</small></span></button>";
+  }).join("");
   document.getElementById("setStart").value=D.settings.start;
   document.getElementById("setEnd").value=D.settings.end;
   document.getElementById("setTz").value=D.settings.tz;
   document.getElementById("titleInput").value=D.title;
-  document.getElementById("accentSwatches").innerHTML=ACCENTS.map(function(c){
-    return '<div class="sw '+(D.settings.accent===c?"on":"")+'" style="background:'+c+'" onclick="setAccent(\''+c+'\')"></div>'; }).join("");
+  var mono=isMono(th);
+  var curA=mono?(D.settings.accentMono||""):(D.settings.accent||"");
+  document.getElementById("accentHint").textContent=mono?"— 비워 두면 흑백으로 고정":"";
+  document.getElementById("accentSwatches").innerHTML=
+    (mono?'<div class="sw auto '+(curA?"":"on")+'" onclick="setAccent(\'\')">흑백</div>':"")+
+    ACCENTS.map(function(c){
+      return '<div class="sw '+(curA===c?"on":"")+'" style="background:'+c+'" onclick="setAccent(\''+c+'\')"></div>'; }).join("");
+  document.getElementById("warnSwatches").innerHTML=
+    '<div class="sw auto '+(D.settings.warn?"":"on")+'" onclick="setWarn(\'\')">기본</div>'+
+    WARNS.map(function(c){
+      return '<div class="sw '+(D.settings.warn===c?"on":"")+'" style="background:'+c+'" onclick="setWarn(\''+c+'\')"></div>'; }).join("");
   document.getElementById("workdays").innerHTML=DOW.map(function(d,i){
     var on=D.settings.workdays.indexOf(i)>=0;
     return '<button class="pill '+(on?"on":"")+'" onclick="toggleWorkday('+i+')">'+d+"</button>"; }).join("");
@@ -2169,7 +2766,7 @@ function renderAdmin(){
       '<input type="time" value="'+esc(p.e)+'" onchange="setPeriod('+i+',\'e\',this.value)"></div>'; }).join("");
 
   document.getElementById("catList").innerHTML=D.categories.map(function(c,i){
-    return '<div class="list-item"><div class="dot" style="background:'+c.color+'"></div><div class="nm">'+esc(c.name)+"</div>"+
+    return '<div class="list-item"><div class="dot" style="background:'+tcolor(c.color)+'"></div><div class="nm">'+esc(c.name)+"</div>"+
       '<button class="icon-btn" onclick="delCategory('+i+')" aria-label="삭제"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>';
   }).join("")||'<div class="note">카테고리가 없습니다</div>';
 
@@ -2197,7 +2794,7 @@ function renderAdmin(){
     return '<div class="edit-row" style="'+gcols+'"><div class="eno">'+(p+1)+"</div>"+cols+"</div>";
   }).join("");
 
-  renderMatrix(); renderSubjectList();
+  renderMatrix(); renderSubjectList(); renderPlanAdmin();
   document.getElementById("setRemTime").value=D.settings.reminderTime||"08:00";
   document.getElementById("remToggle").classList.toggle("on",!!D.settings.reminderOn);
   document.getElementById("setGClient").value=D.settings.googleClientId||"";
@@ -2213,11 +2810,18 @@ function renderAdmin(){
     "개 · 카테고리 "+D.categories.length+"개 &nbsp;("+(bytes/1024).toFixed(1)+" KB)";
   refreshJsonBox();
 }
-function toggleTheme(){
-  D.settings.theme=D.settings.theme==="dark"?"light":"dark";
-  applyTheme(); save(); renderAdmin();
+function setTheme(v){
+  D.settings.theme=v; applyTheme(); save(); renderAdmin();
+  if(curPage()==="stats")renderStats();
 }
-function setAccent(c){ D.settings.accent=c; applyTheme(); save(); renderAdmin(); }
+function setAccent(c){
+  if(isMono(D.settings.theme))D.settings.accentMono=c;
+  else D.settings.accent=c;
+  applyTheme(); save(); renderAdmin();
+  if(curPage()==="stats")renderStats();
+}
+function setWarn(c){ D.settings.warn=c; applyTheme(); save(); renderAdmin();
+  if(curPage()==="stats")renderStats(); }
 function toggleWorkday(i){
   var w=D.settings.workdays, idx=w.indexOf(i);
   if(idx>=0)w.splice(idx,1); else w.push(i);
@@ -2341,6 +2945,148 @@ function renderSubjectList(){
     .map(function(s){ return '<option value="'+esc(s)+'">'; }).join("");
 }
 
+
+/* ============ 학사일정 관리 ============ */
+var planFilter="all";
+function planMonths(){
+  var set={};
+  (D.plan||[]).forEach(function(p){
+    var a=p.from.slice(0,7), b=(p.to||p.from).slice(0,7);
+    set[a]=1; set[b]=1;
+  });
+  var ms=Object.keys(set).sort();
+  if(!ms.length)ms=[todayStr().slice(0,7)];
+  return ms;
+}
+function renderPlanAdmin(){
+  document.getElementById("semFrom").value=D.semFrom||"";
+  document.getElementById("semTo").value=D.semTo||"";
+  var sel=document.getElementById("planMonth");
+  var ms=planMonths(), cur=sel.value;
+  sel.innerHTML='<option value="all">전체 보기</option>'+ms.map(function(m){
+    return '<option value="'+m+'">'+(+m.slice(0,4))+"년 "+(+m.slice(5,7))+"월</option>"; }).join("");
+  if(cur&&(cur==="all"||ms.indexOf(cur)>=0))sel.value=cur;
+  else{
+    var now=todayStr().slice(0,7);
+    sel.value=ms.indexOf(now)>=0?now:(ms[0]||"all");
+  }
+  var kinds=[{v:"all",l:"전체"},{v:"holiday",l:"휴업일"},{v:"exam",l:"고사"},{v:"event",l:"행사"},{v:"creative",l:"창체"}];
+  document.getElementById("planTypeFilter").innerHTML=kinds.map(function(k){
+    return '<button class="chip" onclick="setPlanFilter(\''+k.v+'\')" aria-pressed="'+(planFilter===k.v)+'">'+k.l+"</button>"; }).join("");
+  document.getElementById("planCount").textContent="총 "+((D.plan||[]).length)+"건";
+  renderPlanList();
+}
+function setPlanFilter(v){ planFilter=v; renderPlanAdmin(); }
+function renderPlanList(){
+  var m=document.getElementById("planMonth").value;
+  var list=(D.plan||[]).filter(function(p){
+    if(planFilter!=="all"&&p.type!==planFilter)return false;
+    if(m&&m!=="all"){
+      var a=p.from.slice(0,7), b=(p.to||p.from).slice(0,7);
+      if(!(a<=m&&b>=m))return false;
+    }
+    return true;
+  }).sort(function(a,b){ return a.from.localeCompare(b.from)||a.type.localeCompare(b.type); });
+  if(!list.length){ document.getElementById("planList").innerHTML='<div class="note" style="padding:14px 2px">해당하는 일정이 없습니다.</div>'; return; }
+  document.getElementById("planList").innerHTML=list.map(function(p){
+    var T=PLAN_TYPE[p.type]||PLAN_TYPE.event;
+    var span=(p.to&&p.to>p.from)?(fmtShort(p.from)+"~"+fmtShort(p.to)):fmtShort(p.from)+"("+wdName(p.from)+")";
+    var bits=[gradeText(p.grades),areaText(p),p.note].filter(Boolean).join(" · ");
+    return '<div class="planrow"><span class="pt" style="background:'+T.bg+";color:"+T.c+'">'+T.n+"</span>"+
+      '<span class="pb"><b>'+esc(span)+" " +esc(p.title)+"</b>"+(bits?"<span>"+esc(bits)+"</span>":"")+
+      (p.useDay!=null&&p.useDay>=0?'<span style="color:var(--accent);font-weight:600">'+esc(D.days[p.useDay]||"")+"요일 시간표</span>":"")+"</span>"+
+      '<button class="icon-btn" onclick="editPlan(\''+p.id+'\')" aria-label="수정"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-9 9-4 1 1-4 8-10z"/></svg></button>'+
+      '<button class="icon-btn" onclick="delPlanById(\''+p.id+'\')" aria-label="삭제"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>';
+  }).join("");
+}
+function setSem(){
+  D.semFrom=document.getElementById("semFrom").value||D.semFrom;
+  D.semTo=document.getElementById("semTo").value||D.semTo;
+  save(); toast("학기 기간이 저장되었습니다");
+}
+function openPlanModal(pl,presetDate){
+  document.getElementById("planModalTitle").textContent=pl?"학사일정 수정":"학사일정 추가";
+  document.getElementById("planId").value=pl?pl.id:"";
+  document.getElementById("planType").value=pl?pl.type:"event";
+  document.getElementById("planTitle").value=pl?pl.title:"";
+  document.getElementById("planFrom").value=pl?pl.from:(presetDate||selDate||todayStr());
+  document.getElementById("planTo").value=(pl&&pl.to&&pl.to>pl.from)?pl.to:"";
+  document.getElementById("planNote").value=pl?(pl.note||""):"";
+  var gsel=pl&&pl.grades?pl.grades:[];
+  document.getElementById("planGrades").innerHTML=D.grades.map(function(g,i){
+    return '<button class="pill '+(gsel.indexOf(i)>=0?"on":"")+'" data-g="'+i+'" onclick="this.classList.toggle(\'on\')">'+esc(g)+"</button>"; }).join("");
+  var us=document.getElementById("planUseDay");
+  us.innerHTML='<option value="">사용 안 함</option>'+D.days.map(function(d,i){
+    return '<option value="'+i+'"'+((pl&&pl.useDay===i)?" selected":"")+">"+esc(d)+"요일 시간표</option>"; }).join("");
+  renderPlanAreas(pl&&pl.areas?pl.areas:null);
+  planTypeChange();
+  document.getElementById("planDelBtn").style.display=pl?"flex":"none";
+  showModal("planOverlay");
+}
+function renderPlanAreas(areas){
+  document.getElementById("planAreas").innerHTML=AREA_LIST.map(function(a){
+    var arr=(areas&&areas[a])||[];
+    return '<div class="timerow" style="margin-bottom:6px"><b style="min-width:42px">'+a+"</b>"+
+      D.grades.map(function(g,i){
+        return '<span style="font-size:11px">'+esc(String(g).replace("학년",""))+'</span>'+
+          '<input type="number" min="0" max="20" data-area="'+a+'" data-g="'+i+'" value="'+(arr[i]||0)+'" style="width:46px">';
+      }).join("")+"</div>";
+  }).join("");
+}
+function planTypeChange(){
+  var v=document.getElementById("planType").value;
+  document.getElementById("planAreaWrap").classList.toggle("hidden",v!=="creative");
+}
+function editPlan(id){ var pl=(D.plan||[]).find(function(x){ return x.id===id; }); if(pl)openPlanModal(pl); }
+function savePlan(){
+  var title=document.getElementById("planTitle").value.trim();
+  if(!title){ toast("내용을 입력하세요"); return; }
+  var from=document.getElementById("planFrom").value;
+  if(!from){ toast("시작 날짜를 입력하세요"); return; }
+  var to=document.getElementById("planTo").value||from;
+  if(to<from){ toast("종료 날짜가 시작 날짜보다 빠릅니다"); return; }
+  var g=[].slice.call(document.querySelectorAll("#planGrades .pill.on")).map(function(e){ return +e.dataset.g; });
+  var ud=document.getElementById("planUseDay").value;
+  var type=document.getElementById("planType").value;
+  var areas=null;
+  if(type==="creative"){
+    areas={};
+    document.querySelectorAll("#planAreas input[data-area]").forEach(function(inp){
+      var a=inp.dataset.area, gi=+inp.dataset.g, v=+inp.value||0;
+      if(!areas[a])areas[a]=D.grades.map(function(){ return 0; });
+      areas[a][gi]=v;
+    });
+    Object.keys(areas).forEach(function(a){
+      if(!areas[a].some(function(x){ return x>0; }))delete areas[a]; });
+  }
+  var obj={type:type,title:title,from:from,to:to,
+    grades:(g.length&&g.length<D.grades.length)?g.sort():null,
+    note:document.getElementById("planNote").value.trim(),
+    useDay:(ud===""?null:+ud),areas:areas};
+  var id=document.getElementById("planId").value;
+  if(id)Object.assign((D.plan||[]).find(function(x){ return x.id===id; }),obj);
+  else{ if(!D.plan)D.plan=[]; D.plan.push(Object.assign({id:uid()},obj)); }
+  save(); closeModal("planOverlay"); renderPlanAdmin(); refreshAll(); toast("학사일정이 저장되었습니다");
+}
+function delPlan(){ delPlanById(document.getElementById("planId").value,true); }
+function delPlanById(id,fromModal){
+  if(!confirm("이 일정을 삭제할까요?"))return;
+  D.plan=(D.plan||[]).filter(function(x){ return x.id!==id; });
+  save(); if(fromModal)closeModal("planOverlay");
+  renderPlanAdmin(); refreshAll(); toast("삭제되었습니다");
+}
+function seedPlanAgain(){
+  if(!confirm("2026학년도 2학기 학사일정·창체 계획을 다시 넣습니다.\n지금의 학사일정은 모두 지워집니다. 계속할까요?"))return;
+  D.plan=seedPlan();
+  D.semFrom=SEED_RANGE.from; D.semTo=SEED_RANGE.to;
+  D.official=Object.assign({},SEED_OFFICIAL);
+  save(); renderPlanAdmin(); refreshAll(); toast("학사일정을 넣었습니다 ("+D.plan.length+"건)");
+}
+function clearPlan(){
+  if(!confirm("학사일정과 창체 계획을 모두 삭제할까요? 시간표와 수업 기록은 그대로 남습니다."))return;
+  D.plan=[]; save(); renderPlanAdmin(); refreshAll(); toast("학사일정을 삭제했습니다");
+}
+
 /* 반복 템플릿 */
 function openTplModal(t){
   document.getElementById("tplId").value=t?t.id:"";
@@ -2388,6 +3134,7 @@ function buildExport(scope){
     return {app:"school_wf",kind:"timetable",v:1,savedAt:todayStr(),
       title:D.title,days:D.days,grades:D.grades,periods:D.periods,
       cells:D.cells,mine:D.mine,cellNotes:D.cellNotes,dayRec:D.dayRec,
+      plan:D.plan,semFrom:D.semFrom,semTo:D.semTo,official:D.official,
       classTasks:D.tasks.filter(function(t){ return !!t.link; })};
   if(scope==="work")
     return {app:"school_wf",kind:"work",v:1,savedAt:todayStr(),
@@ -2403,7 +3150,7 @@ function refreshJsonBox(){
   var hint=document.getElementById("scopeHint");
   if(hint)hint.textContent={
     full:"시간표와 할일·일정을 모두 담습니다. 새 기기에 처음 옮길 때 쓰세요.",
-    timetable:"시간표·담당 수업·수업 기록·교시 할 일만 담습니다. 불러와도 할일·일정은 그대로 남습니다.",
+    timetable:"시간표·담당 수업·학사일정·수업 기록·교시 할 일만 담습니다. 불러와도 할일·일정은 그대로 남습니다.",
     work:"업무 할 일·일정·반복 템플릿·카테고리만 담습니다. 불러와도 시간표와 수업 기록은 그대로 남습니다."
   }[exportScopeVal()];
 }
@@ -2600,7 +3347,7 @@ function fireReminder(){
   generateRepeats();
   var t=todayStr();
   var open=D.tasks.filter(function(x){ return x.date===t&&!x.done; }).length;
-  var cls=myPeriodsOn(dayIdxOf(t),t).length;
+  var cls=myPeriodsOn(effDayIdx(t),t).length;
   var body=(cls?("오늘 수업 "+cls+"교시 · "):"")+(open?("할 일 "+open+"개가 기다리고 있어요."):"등록된 할 일이 없어요.");
   if("Notification"in window&&Notification.permission==="granted"){
     try{ new Notification("학교 업무 · 오늘",{body:body}); }catch(e){ toast(body); }
@@ -2621,10 +3368,20 @@ function toast(m){
   clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove("show"); },2400);
 }
 function applyTheme(){
-  document.documentElement.setAttribute("data-theme",D.settings.theme||"light");
-  document.documentElement.style.setProperty("--accent",D.settings.accent);
+  var t=D.settings.theme||"light";
+  if(t==="mono-light")t="mono";
+  var root=document.documentElement;
+  root.setAttribute("data-theme",t);
+  /* 강조색: 컬러 테마는 accent, 모노 테마는 accentMono(비우면 테마 기본 흑/백) */
+  var a=isMono(t)?(D.settings.accentMono||""):(D.settings.accent||"");
+  if(a)root.style.setProperty("--accent",a);
+  else root.style.removeProperty("--accent");
+  /* 경고색: 비우면 테마 기본 */
+  var w=D.settings.warn||"";
+  if(w){ root.style.setProperty("--red",w); root.style.setProperty("--q1",w); }
+  else{ root.style.removeProperty("--red"); root.style.removeProperty("--q1"); }
   var meta=document.querySelector('meta[name="theme-color"]');
-  if(meta)meta.setAttribute("content",D.settings.theme==="dark"?"#16140f":"#f6f2ea");
+  if(meta)meta.setAttribute("content",themeDef(t).meta);
 }
 
 /* ============ 시작 ============ */
@@ -2669,6 +3426,10 @@ document.addEventListener("visibilitychange",function(){
     if(p==="today")renderToday(); else if(p==="week")renderWeek();
   }
 });
+if(D._seeded){
+  delete D._seeded; save();
+  setTimeout(function(){ toast("2026학년도 2학기 학사일정을 넣었습니다 — 관리 화면에서 고칠 수 있어요"); },1200);
+}
 if(D._legacy){
   var n=D._legacy; delete D._legacy; save();
   setTimeout(function(){ toast("이전 프로그램 데이터를 가져왔습니다 ("+n+")"); },700);
