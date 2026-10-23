@@ -206,12 +206,13 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 .ptime{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-top:5px;line-height:1.35}
 .slot.now .pno{color:var(--red)}
 .nowtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--on-fill);background:var(--red);border-radius:4px;padding:1px 5px;margin-top:6px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.cards{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:7px}
 .cards.solo{grid-template-columns:1fr}
 .ccard{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);
   padding:8px 9px 9px;min-height:62px;display:flex;flex-direction:column;gap:2px;width:100%;transition:.15s}
 .ccard:hover{border-color:var(--accent)}
-.ccard.wide{grid-column:1/-1}
+.ccard.wide{grid-column:span var(--span,1)}
+.cards.solo .ccard.wide{grid-column:1/-1}
 .ccard .glabel{font-size:10.5px;font-weight:600;color:var(--ink-faint);display:flex;align-items:center;gap:5px}
 .ccard .subj{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
 .ccard .sub{font-size:11px;color:var(--ink-soft);line-height:1.3}
@@ -588,6 +589,7 @@ td.swapped .cellbtn::before{content:"변경";position:absolute;left:4px;top:3px;
   .cal-dot{display:block;grid-row:1;align-self:end;justify-self:center;
     width:6px;height:6px;border-radius:50%;background:var(--accent);margin-bottom:6px;z-index:2;pointer-events:none}
   .cards{grid-template-columns:1fr;gap:6px}
+  .ccard.wide{grid-column:1/-1}
   .ccard{min-height:0}
   .slot{grid-template-columns:48px 1fr;gap:9px}
   .brk{padding-left:57px}
@@ -1822,7 +1824,7 @@ function renderToday(){
         '<div class="rail"><span class="pno">'+(p+1)+(span>1?"–"+(p+span):"")+"</span>"+
         '<span class="ptime">'+esc(per.s)+"<br>"+esc(endP.e)+"</span>"+
         (live?'<span class="nowtag">지금</span>':"")+"</div>"+
-        '<div class="cards'+(D.settings.mineOnly?" solo":"")+'">'+cards+"</div></div>");
+        '<div class="cards'+(D.settings.mineOnly?" solo":"")+'" style="--cols:'+D.grades.length+'">'+cards+"</div></div>");
       var nx=p+span;
       if(nx<D.periods.length&&!D.settings.mineOnly){
         var gap=mins(D.periods[nx].s)-mins(endP.e);
@@ -1909,7 +1911,7 @@ function classCardHTML(seg,p){
   }
   var hintable=seg.mine||!Object.keys(D.mine).length;
   if(!seg.hasNote&&hintable) h+='<span class="add">＋ 기록·할일</span>';
-  return '<button type="button" class="'+cls+'" '+swAttr(selDate,p,seg)+' onclick="openSheet(\''+selDate+"',"+p+","+seg.gs[0]+')">'+h+"</button>";
+  return '<button type="button" class="'+cls+'"'+(seg.gs.length>1?' style="--span:'+seg.gs.length+'"':"")+' '+swAttr(selDate,p,seg)+' onclick="openSheet(\''+selDate+"',"+p+","+seg.gs[0]+')">'+h+"</button>";
 }
 function creativeAreaText(ds,title,gs){
   var out=[];
